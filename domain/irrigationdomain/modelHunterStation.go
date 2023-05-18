@@ -11,36 +11,34 @@ import (
 )
 
 type HunterStation struct {
-	GlobalId          string                 `json:"globalId"`
-	Name              string                 `json:"name"`
-	IntegrationId     string                 `json:"integrationId"`
-	Model             string                 `json:"model"`
-	Brand             string                 `json:"brand"`
-	Type              string                 `json:"type"`
-	LayerName         string                 `json:"layerName"`
-	LayerId           float64                `json:"layerId"`
-	LayerType         string                 `json:"layerType"`
-	ControllerName    string                 `json:"controllerName"`
-	ControllerId      string                 `json:"controllerId"`
-	ControllerLayerId float64                `json:"controllerLayerId"`
-	AreaId            string                 `json:"areaId"`
-	AreaNameEnglish   string                 `json:"areaNameEnglish"`
-	AreaNameArabic    string                 `json:"areaName"`
-	AreaLayerId       float64                `json:"areaLayerId"`
-	CityId            string                 `json:"cityId"`
-	CityNameEnglish   string                 `json:"cityNameEnglish"`
-	CityNameArabic    string                 `json:"cityName"`
-	CityLayerId       float64                `json:"cityLayerId"`
-	X                 float64                `json:"x"`
-	Y                 float64                `json:"y"`
-	CreatedAt         string                 `json:"createdAt,omitempty"`
-	UpdatedAt         string                 `json:"updatedAt,omitempty"`
-	AdditionalInfo    map[string]interface{} `json:"additionalInfo"`
+	GlobalId        string                 `json:"globalId"`
+	Name            string                 `json:"name"`
+	IntegrationId   string                 `json:"integrationId"`
+	Model           string                 `json:"model"`
+	Brand           string                 `json:"brand"`
+	Type            string                 `json:"type"`
+	LayerType       string                 `json:"layerType"`
+	ControllerName  string                 `json:"controllerName"`
+	ControllerId    string                 `json:"controllerId"`
+	AreaId          string                 `json:"areaId"`
+	AreaNameEnglish string                 `json:"areaNameEnglish"`
+	AreaNameArabic  string                 `json:"areaName"`
+	AreaLayerId     float64                `json:"areaLayerId"`
+	CityId          string                 `json:"cityId"`
+	CityNameEnglish string                 `json:"cityNameEnglish"`
+	CityNameArabic  string                 `json:"cityName"`
+	CityLayerId     float64                `json:"cityLayerId"`
+	X               float64                `json:"x"`
+	Y               float64                `json:"y"`
+	MacAddress      string                 `json:"mac"`
+	CreatedAt       string                 `json:"createdAt,omitempty"`
+	UpdatedAt       string                 `json:"updatedAt,omitempty"`
+	AdditionalInfo  map[string]interface{} `json:"additionalInfo"`
 }
 
 func (thisObj *HunterStation) GetMac() string {
-	//return thisObj.MacAddress
-	return common.EmptyField
+	return thisObj.MacAddress
+	// return common.EmptyField
 }
 
 func (thisObj *HunterStation) GetGlobalId() string {
@@ -130,16 +128,7 @@ func (thisObj *HunterStation) SetParentGatewayInfo(parentDevice cervello.Device)
 		return errors.New("error fetching parent controller: " + err.Error())
 	}
 	thisObj.ControllerName = panel.Name
-	thisObj.ControllerLayerId = panel.LayerId
 	return nil
-}
-
-func (thisObj *HunterStation) GetLayerName() string {
-	return thisObj.LayerName
-}
-
-func (thisObj *HunterStation) GetLayerId() float64 {
-	return thisObj.LayerId
 }
 
 func (thisObj *HunterStation) GetLayerType() string {
@@ -153,12 +142,12 @@ func (thisObj *HunterStation) Validate() error {
 func (thisObj *HunterStation) MigrateFromCsvLine(csvLine []string, keysMap map[string]int) error {
 	var err error
 
-	thisObj.GlobalId = csvLine[keysMap["globalid"]]
-	thisObj.IntegrationId = csvLine[keysMap["integrationuuid"]]
+	thisObj.GlobalId = csvLine[keysMap["globalId"]]
+	thisObj.IntegrationId = csvLine[keysMap["integrationId"]]
 	thisObj.Name = csvLine[keysMap["name"]]
-	thisObj.CityId = csvLine[keysMap["city_uuid"]]
-	thisObj.AreaId = csvLine[keysMap["area_uuid"]]
-
+	thisObj.CityId = csvLine[keysMap["cityId"]]
+	thisObj.AreaId = csvLine[keysMap["areaId"]]
+	thisObj.MacAddress = csvLine[keysMap["mac"]]
 	thisObj.X, err = strconv.ParseFloat(csvLine[keysMap["x"]], 64)
 	if err != nil {
 		return err
@@ -167,14 +156,9 @@ func (thisObj *HunterStation) MigrateFromCsvLine(csvLine []string, keysMap map[s
 	if err != nil {
 		return err
 	}
-	thisObj.LayerId, err = strconv.ParseFloat(csvLine[keysMap["layerid"]], 64)
-	if err != nil {
-		return err
-	}
-	thisObj.LayerName = csvLine[keysMap["layername"]]
-	thisObj.ControllerId = csvLine[keysMap["controller_uuid"]]
+	thisObj.ControllerId = csvLine[keysMap["controllerId"]]
 	thisObj.Brand = csvLine[keysMap["brand"]]
-	thisObj.Model = csvLine[keysMap["modelno"]]
+	thisObj.Model = csvLine[keysMap["model"]]
 	thisObj.Type = "station"
 	thisObj.LayerType = "point"
 	thisObj.AdditionalInfo = common.SetupAdditionalInfo(keysMap, thisObj.GetEssentialKeys(), csvLine)
@@ -184,35 +168,30 @@ func (thisObj *HunterStation) MigrateFromCsvLine(csvLine []string, keysMap map[s
 
 func (thisObj *HunterStation) GetEssentialKeys() []string {
 	return []string{
-		"id",
-		"globalid",
-		"integrationuuid",
+		"globalId",
+		"integrationId",
 		"name",
-		"city_uuid",
-		"area_uuid",
+		"areaId",
 		"x",
 		"y",
-		"layerid",
-		"layername",
-		"controller_uuid",
-		"brand",
-		"modelno",
+		"controllerId",
+		"mac",
 	}
 }
 
 func (thisObj *HunterStation) GetNonDuplicatingKeys() []string {
 	return []string{
-		"id",
-		"globalid",
-		"integrationuuid",
+		"globalId",
+		"integrationId",
 		"name",
+		"mac",
 	}
 }
 
 func (thisObj *HunterStation) GetParentAssetKey() string {
-	return "area_uuid"
+	return "areaId"
 }
 
 func (thisObj *HunterStation) GetParentGatewayKey() string {
-	return "controller_uuid"
+	return "controllerId"
 }

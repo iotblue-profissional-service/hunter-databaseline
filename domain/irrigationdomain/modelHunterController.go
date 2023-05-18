@@ -11,31 +11,33 @@ import (
 )
 
 type HunterController struct {
-	GlobalId        string                 `json:"globalId"`
-	Name            string                 `json:"name"`
-	IntegrationId   string                 `json:"integrationId"`
-	Model           string                 `json:"model"`
-	Brand           string                 `json:"brand"`
-	MacAddress      string                 `json:"mac"`
-	LayerName       string                 `json:"layerName"`
-	LayerId         float64                `json:"layerId"`
-	LayerType       string                 `json:"layerType"`
-	IP              string                 `json:"ip"`
-	Port            int64                  `json:"port"`
-	AreaId          string                 `json:"areaId"`
-	AreaNameEnglish string                 `json:"areaNameEnglish"`
-	AreaNameArabic  string                 `json:"areaName"`
-	AreaLayerId     float64                `json:"areaLayerId"`
-	CityId          string                 `json:"cityId"`
-	CityNameEnglish string                 `json:"cityNameEnglish"`
-	CityNameArabic  string                 `json:"cityName"`
-	CityLayerId     float64                `json:"cityLayerId"`
-	X               float64                `json:"x"`
-	Y               float64                `json:"y"`
-	CreatedAt       string                 `json:"createdAt,omitempty"`
-	UpdatedAt       string                 `json:"updatedAt,omitempty"`
-	IsMaster        bool                   `json:"isMaster"`
-	AdditionalInfo  map[string]interface{} `json:"additionalInfo"`
+	GlobalId         string                 `json:"globalId"`
+	ControllerId     string                 `json:"controllerId"`
+	Type             string                 `json:"type"`
+	Name             string                 `json:"name"`
+	IntegrationId    string                 `json:"integrationId"`
+	Model            string                 `json:"model"`
+	Brand            string                 `json:"brand"`
+	MacAddress       string                 `json:"mac"`
+	LayerType        string                 `json:"layerType"`
+	IP               string                 `json:"ip"`
+	Port             int64                  `json:"port"`
+	AreaId           string                 `json:"areaId"`
+	AreaNameEnglish  string                 `json:"areaNameEnglish"`
+	AreaNameArabic   string                 `json:"areaName"`
+	AreaLayerId      float64                `json:"areaLayerId"`
+	CityId           string                 `json:"cityId"`
+	CityNameEnglish  string                 `json:"cityNameEnglish"`
+	CityNameArabic   string                 `json:"cityName"`
+	CityLayerId      float64                `json:"cityLayerId"`
+	X                float64                `json:"x"`
+	Y                float64                `json:"y"`
+	CreatedAt        string                 `json:"createdAt,omitempty"`
+	UpdatedAt        string                 `json:"updatedAt,omitempty"`
+	StationCount     int64                  `json:"stationCount"`
+	FlowSensorCount  int64                  `json:"flowSensorCount"`
+	MasterValveCount int64                  `json:"MasterValveCount"`
+	AdditionalInfo   map[string]interface{} `json:"additionalInfo"`
 }
 
 func (thisObj *HunterController) GetMac() string {
@@ -109,7 +111,7 @@ func (thisObj *HunterController) GetTags() []string {
 func (thisObj *HunterController) SetParentAssetInfo(parentAsset cervello.Asset) error {
 	area, err := infrastructuredomain.MigrateCervelloAssetToArea(parentAsset)
 	if err != nil {
-		return errors.New("error fetching parent floorPart: " + err.Error())
+		return errors.New("error fetching parent area: " + err.Error())
 	}
 
 	thisObj.CityId = area.CityId
@@ -118,18 +120,8 @@ func (thisObj *HunterController) SetParentAssetInfo(parentAsset cervello.Asset) 
 	thisObj.AreaId = area.GlobalId
 	thisObj.AreaNameEnglish = area.NameEnglish
 	thisObj.AreaNameArabic = area.NameArabic
-	thisObj.CityLayerId = area.CityLayerId
-	thisObj.AreaLayerId = area.LayerId
 
 	return nil
-}
-
-func (thisObj *HunterController) GetLayerName() string {
-	return thisObj.LayerName
-}
-
-func (thisObj *HunterController) GetLayerId() float64 {
-	return thisObj.LayerId
 }
 
 func (thisObj *HunterController) GetLayerType() string {
@@ -158,21 +150,7 @@ func (thisObj *HunterController) GetSearchTag() string {
 
 func (thisObj *HunterController) GetModbusConfig() *cervello.ModbusDeviceConfig {
 	return &cervello.ModbusDeviceConfig{
-		Configuration: []cervello.ModbusConfiguration{
-			{
-				Address: 7001,
-				Mapping: map[string]map[string]string{
-					"7001": {
-						"key":  "register7001",
-						"type": "TELEMETRY",
-					},
-				},
-				SlaveID:       1,
-				Quantity:      1,
-				Sequence:      1,
-				OperationCode: 3,
-			},
-		},
+		Configuration: hunterControllerConfig[:],
 		Schedule: cervello.ModbusConfigurationSchedule{
 			Interval: 10,
 			TimeUnit: "Second",
@@ -183,11 +161,10 @@ func (thisObj *HunterController) GetModbusConfig() *cervello.ModbusDeviceConfig 
 
 func (thisObj *HunterController) MigrateFromCsvLine(csvLine []string, keysMap map[string]int) error {
 	var err error
-	thisObj.GlobalId = csvLine[keysMap["globalid"]]
-	thisObj.IntegrationId = csvLine[keysMap["integrationuuid"]]
+	thisObj.GlobalId = csvLine[keysMap["globalId"]]
+	thisObj.IntegrationId = csvLine[keysMap["integrationId"]]
 	thisObj.Name = csvLine[keysMap["name"]]
-	thisObj.CityId = csvLine[keysMap["city_uuid"]]
-	thisObj.AreaId = csvLine[keysMap["area_uuid"]]
+	thisObj.AreaId = csvLine[keysMap["areaId"]]
 	if err != nil {
 		return err
 	}
@@ -199,56 +176,52 @@ func (thisObj *HunterController) MigrateFromCsvLine(csvLine []string, keysMap ma
 	if err != nil {
 		return err
 	}
-	thisObj.LayerId, err = strconv.ParseFloat(csvLine[keysMap["layerid"]], 64)
-	if err != nil {
-		return err
-	}
-	thisObj.LayerName = csvLine[keysMap["layername"]]
-
 	thisObj.Brand = csvLine[keysMap["brand"]]
-	thisObj.Model = csvLine[keysMap["modelno"]]
+	thisObj.Model = csvLine[keysMap["model"]]
 	thisObj.IP = csvLine[keysMap["ip"]]
 	thisObj.Port, err = strconv.ParseInt(csvLine[keysMap["port"]], 10, 64)
 	if err != nil {
 		return err
 	}
+	thisObj.ControllerId = thisObj.GlobalId
 	thisObj.MacAddress = csvLine[keysMap["mac"]]
 	thisObj.LayerType = "point"
-	thisObj.AdditionalInfo = common.SetupAdditionalInfo(keysMap, thisObj.GetEssentialKeys(), csvLine)
-	thisObj.Name = thisObj.Name + "_" + thisObj.MacAddress
-	thisObj.IsMaster, err = strconv.ParseBool(csvLine[keysMap["is_master"]])
+	thisObj.Type = "controller"
+	thisObj.StationCount, err = strconv.ParseInt(csvLine[keysMap["stationCount"]], 10, 64)
 	if err != nil {
 		return err
 	}
+	thisObj.FlowSensorCount, err = strconv.ParseInt(csvLine[keysMap["flowSensorCount"]], 10, 64)
+	if err != nil {
+		return err
+	}
+	thisObj.MasterValveCount, err = strconv.ParseInt(csvLine[keysMap["masterValveCount"]], 10, 64)
+	if err != nil {
+		return err
+	}
+	thisObj.AdditionalInfo = common.SetupAdditionalInfo(keysMap, thisObj.GetEssentialKeys(), csvLine)
 
 	return err
 }
 
 func (thisObj *HunterController) GetEssentialKeys() []string {
 	return []string{
-		"id",
-		"globalid",
-		"integrationuuid",
-		"city_uuid",
-		"area_uuid",
+		"globalId",
+		"integrationId",
+		"areaId",
 		"name",
 		"ip",
-		"layerid",
-		"layername",
 		"x",
 		"y",
 		"port",
-		"brand",
 		"mac",
-		"is_master",
 	}
 }
 
 func (thisObj *HunterController) GetNonDuplicatingKeys() []string {
 	return []string{
-		"id",
-		"globalid",
-		"integrationuuid",
+		"globalId",
+		"integrationId",
 		"name",
 		"mac",
 		"ip",
@@ -256,7 +229,7 @@ func (thisObj *HunterController) GetNonDuplicatingKeys() []string {
 }
 
 func (thisObj *HunterController) GetParentAssetKey() string {
-	return "area_uuid"
+	return "areaId"
 }
 
 func (thisObj *HunterController) GetParentGatewayKey() string {

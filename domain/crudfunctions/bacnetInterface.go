@@ -112,14 +112,6 @@ func ValidateBacnetDeviceEntity(obj DeviceInterface) error {
 	//	}
 	//}
 
-	if obj.GetLayerName() == "" {
-		return errors.New("LayerName is missing")
-	}
-
-	if obj.GetLayerId() == 0 {
-		return errors.New("LayerId is missing")
-	}
-
 	if obj.GetLayerType() == "" {
 		return errors.New("LayerType is missing")
 	}

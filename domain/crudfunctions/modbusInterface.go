@@ -31,10 +31,6 @@ type ModbusInterface interface {
 
 	GetSearchTag() string
 
-	GetLayerName() string
-
-	GetLayerId() float64
-
 	GetLayerType() string
 
 	SetParentAssetInfo(parentAsset cervello.Asset) error
@@ -110,14 +106,6 @@ func ValidateModbusDeviceEntity(obj ModbusInterface) error {
 	//		return err
 	//	}
 	//}
-
-	if obj.GetLayerName() == "" {
-		return errors.New("LayerName is missing")
-	}
-
-	if obj.GetLayerId() == 0 {
-		return errors.New("LayerId is missing")
-	}
 
 	if obj.GetLayerType() == "" {
 		return errors.New("LayerType is missing")
