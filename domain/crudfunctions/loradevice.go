@@ -223,7 +223,7 @@ func UseCaseLoraDeviceEntity(csvLines [][]string, keysMap map[string]int, object
 }
 
 func checkUniqueLoraDeviceFeatures(obj LoraDeviceInterface) error {
-	if result, _ := common.CheckUniqueDeviceField("featureId", obj.GetFeatureId(), obj.GetLayerName()); !result {
+	if result, _ := common.CheckUniqueDeviceField("featureId", obj.GetFeatureId(), obj.GetSearchTag()); !result {
 		return errors.New("not unique featureId")
 	}
 	if result, _ := common.CheckUniqueDeviceField("integrationId", obj.GetIntegrationId(), ""); !result {
@@ -238,7 +238,7 @@ func checkUniqueLoraDeviceFeatures(obj LoraDeviceInterface) error {
 func updateLoraDeviceEntity(fetchedDevice cervello.Device, obj LoraDeviceInterface, token string) error {
 	// 1- check unique features
 	if fetchedDevice.CustomFields["featureId"] != obj.GetFeatureId() {
-		if result, _ := common.CheckUniqueDeviceField("featureId", obj.GetFeatureId(), obj.GetLayerName()); !result {
+		if result, _ := common.CheckUniqueDeviceField("featureId", obj.GetFeatureId(), obj.GetSearchTag()); !result {
 			return errors.New("not unique featureId")
 		}
 	}

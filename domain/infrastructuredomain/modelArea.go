@@ -18,14 +18,10 @@ type Area struct {
 	CityId           string  `json:"cityId"`
 	CityNameEnglish  string  `json:"cityNameEnglish"`
 	CityNameArabic   string  `json:"cityName"`
-	LayerId          float64 `json:"layerId"`
-	PhaseLayerID     float64 `json:"phaseLayerId"`
-	CityLayerId      float64 `json:"cityLayerId"`
 	CreatedAt        string  `json:"createdAt,omitempty"`
 	UpdatedAt        string  `json:"updatedAt,omitempty"`
 	Area             float64 `json:"area"`
 	LayerType        string  `json:"layerType"`
-	LayerName        string  `json:"layerName"`
 }
 
 func (thisObj *Area) GetGlobalId() string {
@@ -68,16 +64,7 @@ func (thisObj *Area) SetParentAssetInfo(parentAsset cervello.Asset) error {
 	thisObj.CityId = city.GlobalId
 	thisObj.CityNameEnglish = city.NameEnglish
 	thisObj.CityNameArabic = city.NameArabic
-	thisObj.CityLayerId = city.LayerId
 	return nil
-}
-
-func (thisObj *Area) GetLayerName() string {
-	return thisObj.LayerName
-}
-
-func (thisObj *Area) GetLayerId() float64 {
-	return thisObj.LayerId
 }
 
 func (thisObj *Area) GetLayerType() string {
@@ -97,9 +84,7 @@ func (thisObj *Area) MigrateFromCsvLine(csvLine []string, keysMap map[string]int
 	thisObj.NameArabic = csvLine[keysMap["nameAr"]]
 	thisObj.NameArabic = strings.Replace(thisObj.NameArabic, " ", "_", -1)
 	thisObj.NameArabic = strings.Replace(thisObj.NameArabic, ".", "", -1)
-	thisObj.LayerId = common.AreaLayerId
 	thisObj.LayerType = "Polygon"
-	thisObj.LayerName = common.AreaLayerName
 	thisObj.Area, err = strconv.ParseFloat(csvLine[keysMap["area"]], 64)
 	if err != nil {
 		thisObj.Area = 0

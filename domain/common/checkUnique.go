@@ -34,7 +34,7 @@ func CheckUniqueDeviceField(fieldName string, value string, layerName string) (b
 	return true, len(filteredList)
 }
 
-func CheckUniqueAssetField(fieldName string, value string, layerName string) (bool, int) {
+func CheckUniqueAssetField(fieldName string, value string, tag string) (bool, int) {
 	filterQuery := map[string]interface{}{}
 	NumberOfFilters := 0
 	filterQuery[fmt.Sprintf("filters[%d][key]", NumberOfFilters)] = "customFields." + fieldName
@@ -42,10 +42,10 @@ func CheckUniqueAssetField(fieldName string, value string, layerName string) (bo
 	filterQuery[fmt.Sprintf("filters[%d][value]", NumberOfFilters)] = value
 	NumberOfFilters += 1
 
-	if layerName != "" {
-		filterQuery[fmt.Sprintf("filters[%d][key]", NumberOfFilters)] = "customFields.layerName"
-		filterQuery[fmt.Sprintf("filters[%d][operator]", NumberOfFilters)] = "eq"
-		filterQuery[fmt.Sprintf("filters[%d][value]", NumberOfFilters)] = layerName
+	if tag != "" {
+		filterQuery[fmt.Sprintf("filters[%d][key]", NumberOfFilters)] = "tags"
+		filterQuery[fmt.Sprintf("filters[%d][operator]", NumberOfFilters)] = "contains"
+		filterQuery[fmt.Sprintf("filters[%d][value]", NumberOfFilters)] = tag
 		NumberOfFilters += 1
 	}
 

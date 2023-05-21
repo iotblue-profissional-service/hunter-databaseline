@@ -26,10 +26,6 @@ type AssetInterface interface {
 
 	SetParentAssetInfo(parentAsset cervello.Asset) error
 
-	GetLayerName() string
-
-	GetLayerId() float64
-
 	GetLayerType() string
 
 	MigrateFromCsvLine(csvLine []string, keysMap map[string]int) error
@@ -103,14 +99,6 @@ func ValidateAssetEntity(obj AssetInterface) error {
 
 	if !common.IsValidUUID(obj.GetParentAssetId()) {
 		return errors.New("parent asset id must be uuid")
-	}
-
-	if obj.GetLayerName() == "" {
-		return errors.New("LayerName is missing")
-	}
-
-	if obj.GetLayerId() == 0 {
-		return errors.New("LayerId is missing")
 	}
 
 	if obj.GetLayerType() == "" {

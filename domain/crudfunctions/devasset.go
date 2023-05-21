@@ -346,7 +346,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 func UpdateDeviceAssetEntity(fetchedAsset cervello.Asset, obj DeviceAssetInterface, token string) error {
 	// 1- check unique features
 	if fetchedAsset.CustomFields["featureId"] != obj.GetFeatureId() {
-		if result, _ := common.CheckUniqueDeviceField("featureId", obj.GetFeatureId(), obj.GetLayerName()); !result {
+		if result, _ := common.CheckUniqueDeviceField("featureId", obj.GetFeatureId(), obj.GetSearchTag()); !result {
 			return errors.New("not unique featureId")
 		}
 	}
@@ -371,7 +371,7 @@ func UpdateDeviceAssetEntity(fetchedAsset cervello.Asset, obj DeviceAssetInterfa
 	}
 	//
 	if fetchedAsset.CustomFields["featureId"] != obj.GetFeatureId() {
-		if result, _ := common.CheckUniqueAssetField("featureId", obj.GetFeatureId(), obj.GetLayerName()); !result {
+		if result, _ := common.CheckUniqueAssetField("featureId", obj.GetFeatureId(), obj.GetSearchTag()); !result {
 			return errors.New("not unique featureId")
 		}
 	}

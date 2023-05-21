@@ -15,9 +15,7 @@ type City struct {
 	NameEnglish string  `json:"nameEnglish"`
 	NameArabic  string  `json:"name"`
 	Area        float64 `json:"area"`
-	LayerId     float64 `json:"layerId"`
 	LayerType   string  `json:"layerType"`
-	LayerName   string  `json:"layerName"`
 	CreatedAt   string  `json:"createdAt,omitempty"`
 	UpdatedAt   string  `json:"updatedAt,omitempty"`
 }
@@ -83,14 +81,6 @@ func (city *City) Validate() error {
 		return errors.New("ID must be uuid")
 	}
 
-	if city.LayerName == "" {
-		return errors.New("LayerName is missing")
-	}
-
-	if city.LayerId == 0 {
-		return errors.New("LayerId is missing")
-	}
-
 	if city.LayerType == "" {
 		return errors.New("LayerType is missing")
 	}
@@ -111,9 +101,7 @@ func MigrateCityFromCSVLine(csvLine []string, keysMap map[string]int) (City, err
 	result.NameArabic = csvLine[keysMap["nameAr"]]
 	result.NameArabic = strings.Replace(result.NameArabic, " ", "_", -1)
 	result.NameArabic = strings.Replace(result.NameArabic, ".", "", -1)
-	result.LayerId = common.CityLayerId
 	result.LayerType = "Polygon"
-	result.LayerName = common.CityLayerName
 	result.Area, err = strconv.ParseFloat(csvLine[keysMap["area"]], 64)
 	if err != nil {
 		result.Area = 0

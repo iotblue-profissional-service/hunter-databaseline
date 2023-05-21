@@ -23,11 +23,9 @@ type HunterStation struct {
 	AreaId          string                 `json:"areaId"`
 	AreaNameEnglish string                 `json:"areaNameEnglish"`
 	AreaNameArabic  string                 `json:"areaName"`
-	AreaLayerId     float64                `json:"areaLayerId"`
 	CityId          string                 `json:"cityId"`
 	CityNameEnglish string                 `json:"cityNameEnglish"`
 	CityNameArabic  string                 `json:"cityName"`
-	CityLayerId     float64                `json:"cityLayerId"`
 	X               float64                `json:"x"`
 	Y               float64                `json:"y"`
 	MacAddress      string                 `json:"mac"`
@@ -117,8 +115,6 @@ func (thisObj *HunterStation) SetParentAssetInfo(parentAsset cervello.Asset) err
 	thisObj.AreaId = part.GlobalId
 	thisObj.AreaNameEnglish = part.NameEnglish
 	thisObj.AreaNameArabic = part.NameArabic
-	thisObj.CityLayerId = part.CityLayerId
-	thisObj.AreaLayerId = part.LayerId
 	return nil
 }
 
