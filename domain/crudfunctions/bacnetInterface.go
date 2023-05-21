@@ -31,10 +31,6 @@ type BacnetInterface interface {
 
 	GetSearchTag() string
 
-	GetLayerName() string
-
-	GetLayerId() float64
-
 	GetLayerType() string
 
 	SetParentAssetInfo(parentAsset cervello.Asset) error

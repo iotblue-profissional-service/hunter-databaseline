@@ -31,10 +31,6 @@ type LoraDeviceInterface interface {
 
 	SetParentAssetInfo(parentAsset cervello.Asset) error
 
-	GetLayerName() string
-
-	GetLayerId() float64
-
 	GetLayerType() string
 
 	GetLoraAppId() string
@@ -121,14 +117,6 @@ func ValidateLoraDeviceEntity(obj LoraDeviceInterface) error {
 
 	if !common.IsValidMacAddress(obj.GetMac()) {
 		return errors.New("invalid mac address")
-	}
-
-	if obj.GetLayerName() == "" {
-		return errors.New("LayerName is missing")
-	}
-
-	if obj.GetLayerId() == 0 {
-		return errors.New("LayerId is missing")
 	}
 
 	if obj.GetLayerType() == "" {

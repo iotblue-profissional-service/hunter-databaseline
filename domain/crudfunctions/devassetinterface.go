@@ -37,10 +37,6 @@ type DeviceAssetInterface interface {
 
 	SetParentGatewayInfo(parentDevice cervello.Device) error
 
-	GetLayerName() string
-
-	GetLayerId() float64
-
 	GetLayerType() string
 
 	GetAssetType() string
@@ -88,14 +84,6 @@ func ValidateDeviceAssetEntity(obj DeviceAssetInterface) error {
 	//		return err
 	//	}
 	//}
-
-	if obj.GetLayerName() == "" {
-		return errors.New("LayerName is missing")
-	}
-
-	if obj.GetLayerId() == 0 {
-		return errors.New("LayerId is missing")
-	}
 
 	if obj.GetLayerType() == "" {
 		return errors.New("LayerType is missing")

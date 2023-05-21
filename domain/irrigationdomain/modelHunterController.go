@@ -25,11 +25,9 @@ type HunterController struct {
 	AreaId           string                 `json:"areaId"`
 	AreaNameEnglish  string                 `json:"areaNameEnglish"`
 	AreaNameArabic   string                 `json:"areaName"`
-	AreaLayerId      float64                `json:"areaLayerId"`
 	CityId           string                 `json:"cityId"`
 	CityNameEnglish  string                 `json:"cityNameEnglish"`
 	CityNameArabic   string                 `json:"cityName"`
-	CityLayerId      float64                `json:"cityLayerId"`
 	X                float64                `json:"x"`
 	Y                float64                `json:"y"`
 	CreatedAt        string                 `json:"createdAt,omitempty"`

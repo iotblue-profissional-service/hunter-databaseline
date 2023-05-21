@@ -27,10 +27,6 @@ type LoraGatewayInterface interface {
 
 	GetFeatureId() string
 
-	GetLayerName() string
-
-	GetLayerId() float64
-
 	GetLayerType() string
 
 	GetIP() string
@@ -92,14 +88,6 @@ func ValidateLoraGatewayEntity(obj LoraGatewayInterface) error {
 
 	if !common.IsValidMacAddress(obj.GetMAC()) {
 		return errors.New("invalid mac address")
-	}
-
-	if obj.GetLayerName() == "" {
-		return errors.New("LayerName is missing")
-	}
-
-	if obj.GetLayerId() == 0 {
-		return errors.New("LayerId is missing")
 	}
 
 	if obj.GetLayerType() == "" {
