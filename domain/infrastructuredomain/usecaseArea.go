@@ -8,7 +8,7 @@ import (
 )
 
 func UseCaseAreas(csvLines [][]string, keysMap map[string]int, action string) (string, error) {
-	interfaces := make([]crudfunctions.AssetInterface, len(csvLines))
+	interfaces := make([]crudfunctions.DeviceAssetInterface, len(csvLines))
 	for index := range interfaces {
 		interfaces[index] = &Area{}
 	}
@@ -32,7 +32,7 @@ func UseCaseAreas(csvLines [][]string, keysMap map[string]int, action string) (s
 		return "validation finished \n valid document", err
 	}
 
-	err := crudfunctions.UseCaseAssetEntity(csvLines, keysMap, interfaces, (&City{}).GetAssetType(), "area", action, "")
+	err := crudfunctions.UseCaseDeviceAssetEntity(csvLines, keysMap, interfaces, (&City{}).GetAssetType(), "", "area", action, "")
 	if err != nil {
 		return "", err
 	}

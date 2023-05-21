@@ -44,6 +44,14 @@ func (thisObj *Area) GetReferenceName() string {
 	return common.EmptyField
 }
 
+func (thisObj *Area) GetClientId() string {
+	return common.EmptyField
+}
+
+func (thisObj *Area) GetIP() string {
+	return common.EmptyField
+}
+
 func (thisObj *Area) GetFeatureId() string {
 	return common.EmptyField
 }
@@ -52,8 +60,33 @@ func (thisObj *Area) GetParentAssetId() string {
 	return thisObj.CityId
 }
 
+func (thisObj *Area) GetParentGatewayId() string {
+	return common.EmptyField
+}
+
+func (thisObj *Area) GetDeviceType() string {
+	return cervello.DeviceTypeStandalone
+}
+
+func (thisObj *Area) GetTags() []string {
+	return []string{
+		"Hunter",
+		"asset",
+		"Hunter",
+		"irrigation",
+	}
+}
+
+func (thisObj *Area) GetSearchTag() string {
+	return "area"
+}
+
 func (thisObj *Area) GetAssetType() string {
-	return "olympicArea"
+	return "area"
+}
+
+func (thisObj *Area) SetParentGatewayInfo(_ cervello.Device) error {
+	return nil
 }
 
 func (thisObj *Area) SetParentAssetInfo(parentAsset cervello.Asset) error {
@@ -106,9 +139,27 @@ func (thisObj *Area) GetEssentialKeys() []string {
 func (thisObj *Area) GetNonDuplicatingKeys() []string {
 	return []string{
 		"globalId",
+		"nameEn",
+		"nameAr",
 	}
 }
 
 func (thisObj *Area) GetParentAssetKey() string {
 	return "cityId"
+}
+
+func (thisObj *Area) GetParentGatewayKey() string {
+	return "cityId"
+}
+
+func (thisObj *Area) GetMac() string {
+	return common.EmptyField
+}
+
+func (thisObj *Area) GetParentGatewayKeyGetMac() string {
+	return common.EmptyField
+}
+
+func (thisObj *Area) GetCommunicationProtocolConfiguration() (string, interface{}) {
+	return common.EmptyField, nil
 }
