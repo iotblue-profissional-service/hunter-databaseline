@@ -28,7 +28,7 @@ func ValidateDocument(csvLines [][]string,
 	// 1- validate all keys exist
 	err := common.ValidateAllColumnsExist(keysMap, ColumnNames)
 	if err != nil {
-		fmt.Printf(fmt.Sprintf("%v", err))
+		fmt.Println(fmt.Sprintf("%v", err))
 		errCount += 1
 	}
 	if errCount > 0 {
@@ -47,7 +47,7 @@ func ValidateDocument(csvLines [][]string,
 			}
 			count[variable]["counts"] += 1
 			if count[variable]["counts"] > 1 {
-				fmt.Printf(fmt.Sprintf("there are duplications in column %s with row %d and row %d", key, index+2, count[variable]["firstLine"]))
+				fmt.Println(fmt.Sprintf("there are duplications in column %s with row %d and row %d", key, index+2, count[variable]["firstLine"]))
 				errCount += 1
 			}
 			if count[variable]["firstLine"] == 0 {
@@ -61,13 +61,13 @@ func ValidateDocument(csvLines [][]string,
 	for index, line := range csvLines {
 		err = validatingObjects[index].MigrateFromCsvLine(line, keysMap)
 		if err != nil {
-			fmt.Printf(fmt.Sprintf("there is error in line %d :%v", index+2, err))
+			fmt.Println(fmt.Sprintf("there is error in line %d :%v", index+2, err))
 			errCount += 1
 		}
 
 		err = validatingObjects[index].Validate()
 		if err != nil {
-			fmt.Printf(fmt.Sprintf("there is error in line %d :%v", index+2, err))
+			fmt.Println(fmt.Sprintf("there is error in line %d :%v", index+2, err))
 			errCount += 1
 		}
 	}
@@ -77,11 +77,11 @@ func ValidateDocument(csvLines [][]string,
 	if parentsData.ParentAssetType != common.EmptyField {
 		parentAssets, err := cervello.GetAssetsByAssetType(fmt.Sprintf("\"%s\"", parentsData.ParentAssetType), cervello.QueryParams{PaginationObj: paginationObj}, token)
 		if err != nil {
-			fmt.Printf(fmt.Sprintf("error fetching parent assets from the database: %v", err))
+			fmt.Println(fmt.Sprintf("error fetching parent assets from the database: %v", err))
 			return err
 		}
 		if len(parentAssets) <= 0 {
-			fmt.Printf("no parent assets in the database")
+			fmt.Println("no parent assets in the database")
 			return errors.New("no parent assets in the database")
 		}
 
@@ -94,7 +94,7 @@ func ValidateDocument(csvLines [][]string,
 			assetKey := parentsData.ParentAssetKey
 			parentAssetId := line[keysMap[assetKey]]
 			if parentAssetMap[parentAssetId].ID == "" {
-				fmt.Printf(fmt.Sprintf("%s doesnt exist in database for line %d", assetKey, index+2))
+				fmt.Println(fmt.Sprintf("%s doesnt exist in database for line %d", assetKey, index+2))
 				errCount += 1
 			}
 		}
@@ -110,7 +110,7 @@ func ValidateDocument(csvLines [][]string,
 			}},
 		}, token)
 		if (err != nil) || (len(parentGateways) == 0) {
-			fmt.Printf("no parent gateways in the database")
+			fmt.Println("no parent gateways in the database")
 			return errors.New("no parent gateways in the database")
 		}
 		for _, parent := range parentGateways {
@@ -120,7 +120,7 @@ func ValidateDocument(csvLines [][]string,
 			gatewayKey := parentsData.ParentGatewayKey
 			parentGatewayId := line[keysMap[gatewayKey]]
 			if parentGatewayMap[parentGatewayId].ID == "" {
-				fmt.Printf(fmt.Sprintf("%s doesnt exist in database for line %d", gatewayKey, index+2))
+				fmt.Println(fmt.Sprintf("%s doesnt exist in database for line %d", gatewayKey, index+2))
 				errCount += 1
 			}
 		}

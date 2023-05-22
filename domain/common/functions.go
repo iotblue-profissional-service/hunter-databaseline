@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"net"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func IsValidUUID(u string) bool {
@@ -72,6 +73,7 @@ func SetupAdditionalInfo(keysMap map[string]int, essentialKeys []string, csvLine
 	result := map[string]interface{}{}
 	// mapping essential keys
 	essentialKeysMap := map[string]bool{}
+	essentialKeys = append(essentialKeys, "initialValue")
 
 	for _, key := range essentialKeys {
 		essentialKeysMap[key] = true

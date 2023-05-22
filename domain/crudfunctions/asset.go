@@ -36,10 +36,10 @@ func UseCaseAssetEntity(csvLines [][]string, keysMap map[string]int, objects []A
 	}
 	newAssetsMap := map[string]AssetInterface{}
 	for index, line := range csvLines {
-		fmt.Printf(fmt.Sprintf("Reading Line: %d", index+2))
+		fmt.Println(fmt.Sprintf("Reading Line: %d", index+2))
 		err = objects[index].MigrateFromCsvLine(line, keysMap)
 		if err != nil {
-			fmt.Printf(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
+			fmt.Println(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
 			return err
 		}
 		newAssetsMap[objects[index].GetGlobalId()] = objects[index]
@@ -51,7 +51,7 @@ func UseCaseAssetEntity(csvLines [][]string, keysMap map[string]int, objects []A
 		for id := range existingAssetsMap {
 			common.SleepExecution()
 			if newAssetsMap[id] == nil {
-				fmt.Printf(fmt.Sprintf("deleting asset with id: %s", id))
+				fmt.Println(fmt.Sprintf("deleting asset with id: %s", id))
 				err = cervello.DeleteAsset(id, token)
 				if err != nil {
 					return errors.New("error deleting asset")
@@ -65,11 +65,11 @@ func UseCaseAssetEntity(csvLines [][]string, keysMap map[string]int, objects []A
 	paginationObj := cervello.Pagination{PageSize: 999999, PageNumber: 0}
 	parentAssets, err := cervello.GetAssetsByAssetType(fmt.Sprintf("\"%s\"", parentAssetType), cervello.QueryParams{PaginationObj: paginationObj}, token)
 	if err != nil {
-		fmt.Printf(fmt.Sprintf("error fetching parent assets from the database: %s", err))
+		fmt.Println(fmt.Sprintf("Error fetching parent assets from the database: %s", err))
 		return err
 	}
 	if len(parentAssets) <= 0 {
-		fmt.Printf("no parent assets in the database")
+		fmt.Println("no parent assets in the database")
 		return errors.New("no parent assets in the database")
 	}
 	parentAssetMap := make(map[string]cervello.Asset)
@@ -84,45 +84,45 @@ func UseCaseAssetEntity(csvLines [][]string, keysMap map[string]int, objects []A
 		//create asset (or update if it exists)
 		fetchedAsset := existingAssetsMap[objects[index].GetGlobalId()]
 		if fetchedAsset.ID == "" && action != common.UpdateOnlyAction {
-			fmt.Printf(fmt.Sprintf("creating line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("creating line no: %d", index+2))
 			//region 4-set parent assets info
 			parentAssetId := objects[index].GetParentAssetId()
 			if parentAssetMap[parentAssetId].ID != "" {
 				err = objects[index].SetParentAssetInfo(parentAssetMap[parentAssetId])
 				if err != nil {
-					fmt.Printf(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
 					return err
 				}
 			} else {
-				fmt.Printf(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
+				fmt.Println(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 				return errors.New(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 			}
 			//endregion
 
 			//region 5- validate asset
 			if err = objects[index].Validate(); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating asset : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating asset : %d : %s", index+2, err))
 				return err
 			}
 			//endregion
 
 			//region 6- create
 			if err = checkUniqueAssetFeatures(objects[index]); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating asset : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating asset : %d : %s", index+2, err))
 				return err
 			}
 
 			//migrate to cervello asset
 			asset, err := MigrateToCervelloAsset(objects[index])
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("Error migrating asset : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error migrating asset : %d : %s", index+2, err))
 				return err
 			}
 
 			// create asset
 			_, err = cervello.CreateAsset(asset, token)
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("error creating line no: %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error creating line no: %d : %s", index+2, err))
 				return errors.New(fmt.Sprintf("error creating line no: %d : %s", index+2, err))
 			}
 			//endregion
@@ -131,7 +131,7 @@ func UseCaseAssetEntity(csvLines [][]string, keysMap map[string]int, objects []A
 			_, err = cervello.AssignAssetToAsset(objects[index].GetGlobalId(), objects[index].GetParentAssetId(), token)
 			if err != nil {
 				_ = cervello.DeleteAsset(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 			}
 			//endregion
@@ -142,25 +142,25 @@ func UseCaseAssetEntity(csvLines [][]string, keysMap map[string]int, objects []A
 				continue
 			}
 
-			fmt.Printf(fmt.Sprintf("updating line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("updating line no: %d", index+2))
 
 			//region 4-set parent assets info
 			parentAssetId := objects[index].GetParentAssetId()
 			if parentAssetMap[parentAssetId].ID != "" {
 				err = objects[index].SetParentAssetInfo(parentAssetMap[parentAssetId])
 				if err != nil {
-					fmt.Printf(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
 					return err
 				}
 			} else {
-				fmt.Printf(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
+				fmt.Println(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 				return errors.New(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 			}
 			//endregion
 
 			//region 5- validate asset
 			if err = objects[index].Validate(); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating asset : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating asset : %d : %s", index+2, err))
 				return err
 			}
 			//endregion
@@ -168,7 +168,7 @@ func UseCaseAssetEntity(csvLines [][]string, keysMap map[string]int, objects []A
 			//region 6- update
 			err = updateAssetEntity(fetchedAsset, objects[index], token)
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("Error updating asset: %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error updating asset: %d : %s", index+2, err))
 				return err
 			}
 			//endregion
@@ -177,7 +177,7 @@ func UseCaseAssetEntity(csvLines [][]string, keysMap map[string]int, objects []A
 			_, err = cervello.AssignAssetToAsset(objects[index].GetGlobalId(), objects[index].GetParentAssetId(), token)
 			if err != nil {
 				_ = cervello.DeleteAsset(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 			}
 			//endregion
@@ -250,13 +250,13 @@ func deleteAssets(csvLines [][]string, keysMap map[string]int, objects []AssetIn
 	//region 1- delete all objects
 	if action == common.DeleteAction {
 		for index, asset := range existingAssets {
-			fmt.Printf(fmt.Sprintf("deleting line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("deleting line no: %d", index+2))
 			err := cervello.DeleteAsset(asset.ID, token)
 			if err != nil {
 				return errors.New(fmt.Sprintf("error deleting line no: %d", index+2))
 			}
 		}
-		fmt.Printf(fmt.Sprintf("all %s deleted successfully", entityName))
+		fmt.Println(fmt.Sprintf("all %s deleted successfully", entityName))
 		return nil
 	}
 
@@ -268,7 +268,7 @@ func deleteAssets(csvLines [][]string, keysMap map[string]int, objects []AssetIn
 	newAssetsMap := map[string]AssetInterface{}
 	for index, line := range csvLines {
 		common.SleepExecution()
-		fmt.Printf(fmt.Sprintf("Reading Line: %d", index+2))
+		fmt.Println(fmt.Sprintf("Reading Line: %d", index+2))
 		err = objects[index].MigrateFromCsvLine(line, keysMap)
 		if err != nil {
 			return errors.New(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
@@ -282,14 +282,14 @@ func deleteAssets(csvLines [][]string, keysMap map[string]int, objects []AssetIn
 		for id := range existingAssetsMap {
 			common.SleepExecution()
 			if newAssetsMap[id] == nil {
-				fmt.Printf(fmt.Sprintf("deleting asset with id: %s", id))
+				fmt.Println(fmt.Sprintf("deleting asset with id: %s", id))
 				err = cervello.DeleteAsset(id, token)
 				if err != nil {
 					return errors.New("error deleting asset")
 				}
 			}
 		}
-		fmt.Printf(fmt.Sprintf("other %s assets deleted successfully", entityName))
+		fmt.Println(fmt.Sprintf("other %s assets deleted successfully", entityName))
 		return nil
 	}
 	//endregion
@@ -298,14 +298,14 @@ func deleteAssets(csvLines [][]string, keysMap map[string]int, objects []AssetIn
 	if action == common.DeleteCsvAction {
 		for id := range newAssetsMap {
 			common.SleepExecution()
-			fmt.Printf(fmt.Sprintf("deleting asset with id: %s", id))
+			fmt.Println(fmt.Sprintf("deleting asset with id: %s", id))
 			err = cervello.DeleteAsset(id, token)
 			if err != nil {
 				return errors.New("error deleting asset")
 			}
 
 		}
-		fmt.Printf(fmt.Sprintf("csv %s assets deleted successfully", entityName))
+		fmt.Println(fmt.Sprintf("csv %s assets deleted successfully", entityName))
 		return nil
 	}
 	//endregion

@@ -15,10 +15,10 @@ func UseCaseLoraGatewayEntity(csvLines [][]string, keysMap map[string]int, objec
 		return err
 	}
 	for index, line := range csvLines {
-		fmt.Printf(fmt.Sprintf("Reading Line: %d", index+2))
+		fmt.Println(fmt.Sprintf("Reading Line: %d", index+2))
 		err = objects[index].MigrateFromCsvLine(line, keysMap)
 		if err != nil {
-			fmt.Printf(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
+			fmt.Println(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
 			return err
 		}
 	}
@@ -28,11 +28,11 @@ func UseCaseLoraGatewayEntity(csvLines [][]string, keysMap map[string]int, objec
 	paginationObj := cervello.Pagination{PageSize: 999999, PageNumber: 0}
 	parentAssets, err := cervello.GetAssetsByAssetType(fmt.Sprintf("\"%s\"", parentAssetType), cervello.QueryParams{PaginationObj: paginationObj}, token)
 	if err != nil {
-		fmt.Printf(fmt.Sprintf("error fetching parent assets from the database: %s", err))
+		fmt.Println(fmt.Sprintf("error fetching parent assets from the database: %s", err))
 		return err
 	}
 	if len(parentAssets) <= 0 {
-		fmt.Printf("no parent assets in the database")
+		fmt.Println("no parent assets in the database")
 		return errors.New("no parent assets in the database")
 	}
 	parentAssetMap := make(map[string]cervello.Asset)
@@ -46,25 +46,25 @@ func UseCaseLoraGatewayEntity(csvLines [][]string, keysMap map[string]int, objec
 
 		// create device (or update if it exists)
 		if fetchedDevice, _ := cervello.LoraService.GetGatewayByID(objects[index].GetGlobalId(), token); fetchedDevice == nil && action != common.UpdateOnlyAction {
-			fmt.Printf(fmt.Sprintf("creating line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("creating line no: %d", index+2))
 
 			//region 3- set parent assets info
 			parentAssetId := objects[index].GetParentAssetId()
 			if parentAssetMap[parentAssetId].ID != "" {
 				err = objects[index].SetParentAssetInfo(parentAssetMap[parentAssetId])
 				if err != nil {
-					fmt.Printf(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
 					return err
 				}
 			} else {
-				fmt.Printf(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
+				fmt.Println(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 				return errors.New(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 			}
 			//endregion
 
 			//region 4- validate device
 			if err := objects[index].Validate(); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
 				return err
 			}
 			//endregion
@@ -87,25 +87,25 @@ func UseCaseLoraGatewayEntity(csvLines [][]string, keysMap map[string]int, objec
 			if action == common.CreateOnlyAction || fetchedDevice.ID == "" {
 				continue
 			}
-			fmt.Printf(fmt.Sprintf("updating line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("updating line no: %d", index+2))
 
 			//region 3- set parent assets info
 			parentAssetId := objects[index].GetParentAssetId()
 			if parentAssetMap[parentAssetId].ID != "" {
 				err = objects[index].SetParentAssetInfo(parentAssetMap[parentAssetId])
 				if err != nil {
-					fmt.Printf(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
 					return err
 				}
 			} else {
-				fmt.Printf(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
+				fmt.Println(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 				return errors.New(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 			}
 			//endregion
 
 			//region 4- validate device
 			if err := objects[index].Validate(); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
 				return err
 			}
 			//endregion
@@ -113,7 +113,7 @@ func UseCaseLoraGatewayEntity(csvLines [][]string, keysMap map[string]int, objec
 			//region 5- update device
 			err := updateLoraGatewayEntity(*fetchedDevice, objects[index], token)
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("Error updating device: %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error updating device: %d : %s", index+2, err))
 				return err
 			}
 			//endregion

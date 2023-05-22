@@ -38,10 +38,10 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 	//region 1- migrate from csv lines
 	newDevicesMap := map[string]ModbusInterface{}
 	for index, line := range csvLines {
-		fmt.Printf(fmt.Sprintf("Reading Line: %d", index+2))
+		fmt.Println(fmt.Sprintf("Reading Line: %d", index+2))
 		err = objects[index].MigrateFromCsvLine(line, keysMap)
 		if err != nil {
-			fmt.Printf(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
+			fmt.Println(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
 			return err
 		}
 		newDevicesMap[objects[index].GetGlobalId()] = objects[index]
@@ -51,11 +51,11 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 	//region 2- fetch parent assets
 	parentAssets, err := cervello.GetAssetsByAssetType(fmt.Sprintf("\"%s\"", parentAssetType), cervello.QueryParams{PaginationObj: paginationObj}, token)
 	if err != nil {
-		fmt.Printf(fmt.Sprintf("error fetching parent assets from the database: %s", err))
+		fmt.Println(fmt.Sprintf("error fetching parent assets from the database: %s", err))
 		return err
 	}
 	if len(parentAssets) <= 0 {
-		fmt.Printf("no parent assets in the database")
+		fmt.Println("no parent assets in the database")
 		return errors.New("no parent assets in the database")
 	}
 	parentAssetMap := make(map[string]cervello.Asset)
@@ -69,7 +69,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 		common.SleepExecution()
 		for id := range existingDeviceMap {
 			if newDevicesMap[id] == nil {
-				fmt.Printf(fmt.Sprintf("deleting device with id: %s", id))
+				fmt.Println(fmt.Sprintf("deleting device with id: %s", id))
 				err = cervello.DeleteDevice(id, token)
 				if err != nil {
 					return errors.New("error deleting device")
@@ -92,7 +92,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 			}},
 		}, token)
 		if (err != nil) || (len(parentGateways) == 0) {
-			fmt.Printf("no parent gateways in the database")
+			fmt.Println("no parent gateways in the database")
 			return errors.New("no parent gateways in the database")
 		}
 		for _, parent := range parentGateways {
@@ -106,18 +106,18 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 
 		// create device (or update if it exists)
 		if fetchedDevice := existingDeviceMap[objects[index].GetGlobalId()]; fetchedDevice.ID == "" && action != common.UpdateOnlyAction {
-			fmt.Printf(fmt.Sprintf("creating line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("creating line no: %d", index+2))
 
 			//region 5- set parent assets info
 			parentAssetId := objects[index].GetParentAssetId()
 			if parentAssetMap[parentAssetId].ID != "" {
 				err = objects[index].SetParentAssetInfo(parentAssetMap[parentAssetId])
 				if err != nil {
-					fmt.Printf(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
 					return err
 				}
 			} else {
-				fmt.Printf(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
+				fmt.Println(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 				return errors.New(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 			}
 			//endregion
@@ -128,11 +128,11 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 				if parentGatewayMap[parentGatewayId].ID != "" {
 					err = objects[index].SetParentGatewayInfo(parentGatewayMap[parentGatewayId])
 					if err != nil {
-						fmt.Printf(fmt.Sprintf("error assign parent gateway info for line no: %d", index+2))
+						fmt.Println(fmt.Sprintf("error assign parent gateway info for line no: %d", index+2))
 						return err
 					}
 				} else {
-					fmt.Printf(fmt.Sprintf("invalid parent gateway id for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("invalid parent gateway id for line no: %d", index+2))
 					return errors.New(fmt.Sprintf("invalid gateway asset id for line no: %d", index+2))
 				}
 			}
@@ -140,21 +140,21 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 
 			//region 7- validate device
 			if err = objects[index].Validate(); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
 				return err
 			}
 			//endregion
 
 			//region 8- create
 			if err = checkUniqueModbusFeatures(objects[index]); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
 				return err
 			}
 
 			//migrate to cervello device
 			device, err := MigrateToCervelloModBusDevice(objects[index])
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("Error migrating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error migrating device : %d : %s", index+2, err))
 				return err
 			}
 			if objects[index].GetDeviceType() == cervello.DeviceTypeGateWay {
@@ -165,7 +165,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 			// create device
 			_, err = cervello.CreateDevice(device, token)
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("error creating line no: %d: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error creating line no: %d: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error creating line no: %d: %s", index+2, err))
 			}
 			//endregion
@@ -174,7 +174,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 			_, err = cervello.AssignDeviceToApplication(objects[index].GetGlobalId(), token)
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
 			}
 			//endregion
@@ -183,7 +183,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 			_, err = cervello.AssignDeviceToAsset(objects[index].GetGlobalId(), objects[index].GetParentAssetId(), token)
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 			}
 			//endregion
@@ -193,7 +193,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 				err = cervello.UpdateModbusDeviceConfig(objects[index].GetGlobalId(), objects[index].GetModbusConfig(), "")
 				if err != nil {
 					_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
-					fmt.Printf(fmt.Sprintf("error set modbus config for line no: %d to the parent asset: %s", index+2, err))
+					fmt.Println(fmt.Sprintf("error set modbus config for line no: %d to the parent asset: %s", index+2, err))
 					return errors.New(fmt.Sprintf("error set modbus config for line no: %d to the parent asset: %s", index+2, err))
 				}
 			}
@@ -206,18 +206,18 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 				continue
 			}
 
-			fmt.Printf(fmt.Sprintf("updating line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("updating line no: %d", index+2))
 
 			//region 5- set parent assets info
 			parentAssetId := objects[index].GetParentAssetId()
 			if parentAssetMap[parentAssetId].ID != "" {
 				err = objects[index].SetParentAssetInfo(parentAssetMap[parentAssetId])
 				if err != nil {
-					fmt.Printf(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
 					return err
 				}
 			} else {
-				fmt.Printf(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
+				fmt.Println(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 				return errors.New(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 			}
 			//endregion
@@ -228,11 +228,11 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 				if parentGatewayMap[parentGatewayId].ID != "" {
 					err = objects[index].SetParentGatewayInfo(parentGatewayMap[parentGatewayId])
 					if err != nil {
-						fmt.Printf(fmt.Sprintf("error assign parent gateway info for line no: %d", index+2))
+						fmt.Println(fmt.Sprintf("error assign parent gateway info for line no: %d", index+2))
 						return err
 					}
 				} else {
-					fmt.Printf(fmt.Sprintf("invalid parent gateway id for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("invalid parent gateway id for line no: %d", index+2))
 					return errors.New(fmt.Sprintf("invalid gateway asset id for line no: %d", index+2))
 				}
 			}
@@ -240,7 +240,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 
 			//region 7- validate device
 			if err = objects[index].Validate(); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
 				return err
 			}
 			//endregion
@@ -248,7 +248,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 			//region 8- update
 			err = updateModbusEntity(fetchedDevice, objects[index], token)
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("Error updating device: %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error updating device: %d : %s", index+2, err))
 				return err
 			}
 			//endregion
@@ -257,7 +257,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 			_, err = cervello.AssignDeviceToApplication(objects[index].GetGlobalId(), token)
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
 			}
 			//endregion
@@ -266,7 +266,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 			_, err = cervello.AssignDeviceToAsset(objects[index].GetGlobalId(), objects[index].GetParentAssetId(), token)
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 			}
 			//endregion
@@ -276,7 +276,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 				err = cervello.UpdateModbusDeviceConfig(objects[index].GetGlobalId(), objects[index].GetModbusConfig(), "")
 				if err != nil {
 					_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
-					fmt.Printf(fmt.Sprintf("error set modbus config for line no: %d to the parent asset: %s", index+2, err))
+					fmt.Println(fmt.Sprintf("error set modbus config for line no: %d to the parent asset: %s", index+2, err))
 					return errors.New(fmt.Sprintf("error set modbus config for line no: %d to the parent asset: %s", index+2, err))
 				}
 			}
@@ -379,13 +379,13 @@ func deleteModbusDevices(csvLines [][]string, keysMap map[string]int, objects []
 	//region 1- delete all objects
 	if action == common.DeleteAction {
 		for index, device := range existingDevices {
-			fmt.Printf(fmt.Sprintf("deleting line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("deleting line no: %d", index+2))
 			err := cervello.DeleteDevice(device.ID, token)
 			if err != nil {
 				return errors.New(fmt.Sprintf("error deleting line no: %d", index+2))
 			}
 		}
-		fmt.Printf(fmt.Sprintf("all %s deleted successfully", entityName))
+		fmt.Println(fmt.Sprintf("all %s deleted successfully", entityName))
 		return nil
 	}
 
@@ -398,7 +398,7 @@ func deleteModbusDevices(csvLines [][]string, keysMap map[string]int, objects []
 	newDevicesMap := map[string]ModbusInterface{}
 	for index, line := range csvLines {
 		common.SleepExecution()
-		fmt.Printf(fmt.Sprintf("Reading Line: %d", index+2))
+		fmt.Println(fmt.Sprintf("Reading Line: %d", index+2))
 		err = objects[index].MigrateFromCsvLine(line, keysMap)
 		if err != nil {
 			return errors.New(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
@@ -412,14 +412,14 @@ func deleteModbusDevices(csvLines [][]string, keysMap map[string]int, objects []
 		for id := range existingDeviceMap {
 			common.SleepExecution()
 			if newDevicesMap[id] == nil {
-				fmt.Printf(fmt.Sprintf("deleting device with id: %s", id))
+				fmt.Println(fmt.Sprintf("deleting device with id: %s", id))
 				err = cervello.DeleteDevice(id, token)
 				if err != nil {
 					return errors.New("error deleting device")
 				}
 			}
 		}
-		fmt.Printf(fmt.Sprintf("other %s devices deleted successfully", entityName))
+		fmt.Println(fmt.Sprintf("other %s devices deleted successfully", entityName))
 		return nil
 	}
 	//endregion
@@ -428,14 +428,14 @@ func deleteModbusDevices(csvLines [][]string, keysMap map[string]int, objects []
 	if action == common.DeleteCsvAction {
 		for id := range newDevicesMap {
 			common.SleepExecution()
-			fmt.Printf(fmt.Sprintf("deleting device with id: %s", id))
+			fmt.Println(fmt.Sprintf("deleting device with id: %s", id))
 			err = cervello.DeleteDevice(id, token)
 			if err != nil {
 				return errors.New("error deleting device")
 			}
 
 		}
-		fmt.Printf(fmt.Sprintf("csv %s devices deleted successfully", entityName))
+		fmt.Println(fmt.Sprintf("csv %s devices deleted successfully", entityName))
 		return nil
 	}
 	//endregion

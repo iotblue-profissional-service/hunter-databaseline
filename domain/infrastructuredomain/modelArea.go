@@ -8,20 +8,26 @@ import (
 	"strings"
 )
 
+type Geometry struct {
+	Type        string        `json:"type"`
+	Coordinates [][][]float64 `json:"coordinates"`
+}
+
 type Area struct {
-	GlobalId         string  `json:"globalId"`
-	NameEnglish      string  `json:"name_English"`
-	NameArabic       string  `json:"name"`
-	PhaseId          string  `json:"phaseId"`
-	PhaseNameEnglish string  `json:"phaseNameEnglish"`
-	PhaseNameArabic  string  `json:"phaseName"`
-	CityId           string  `json:"cityId"`
-	CityNameEnglish  string  `json:"cityNameEnglish"`
-	CityNameArabic   string  `json:"cityName"`
-	CreatedAt        string  `json:"createdAt,omitempty"`
-	UpdatedAt        string  `json:"updatedAt,omitempty"`
-	Area             float64 `json:"area"`
-	LayerType        string  `json:"layerType"`
+	GlobalId         string   `json:"globalId"`
+	NameEnglish      string   `json:"name"`
+	NameArabic       string   `json:"name_Arabic"`
+	PhaseId          string   `json:"phaseId"`
+	PhaseNameEnglish string   `json:"phaseNameEnglish"`
+	PhaseNameArabic  string   `json:"phaseName"`
+	CityId           string   `json:"cityId"`
+	CityNameEnglish  string   `json:"cityName"`
+	CityNameArabic   string   `json:"cityNameArabic"`
+	CreatedAt        string   `json:"createdAt,omitempty"`
+	UpdatedAt        string   `json:"updatedAt,omitempty"`
+	Area             float64  `json:"area"`
+	LayerType        string   `json:"layerType"`
+	Coordinates      Geometry `json:"Geometry`
 }
 
 func (thisObj *Area) GetGlobalId() string {
@@ -29,7 +35,7 @@ func (thisObj *Area) GetGlobalId() string {
 }
 
 func (thisObj *Area) GetName() string {
-	return thisObj.NameArabic
+	return thisObj.NameEnglish
 }
 
 func (thisObj *Area) GetModel() string {
@@ -41,11 +47,11 @@ func (thisObj *Area) ValidateModel() error {
 }
 
 func (thisObj *Area) GetReferenceName() string {
-	return common.EmptyField
+	return thisObj.NameEnglish
 }
 
 func (thisObj *Area) GetClientId() string {
-	return common.EmptyField
+	return ""
 }
 
 func (thisObj *Area) GetIP() string {
@@ -72,7 +78,7 @@ func (thisObj *Area) GetTags() []string {
 	return []string{
 		"Hunter",
 		"asset",
-		"Hunter",
+		"area",
 		"irrigation",
 	}
 }
@@ -112,7 +118,7 @@ func (thisObj *Area) MigrateFromCsvLine(csvLine []string, keysMap map[string]int
 	var err error = nil
 	thisObj.GlobalId = csvLine[keysMap["globalId"]]
 	thisObj.CityId = csvLine[keysMap["cityId"]]
-	thisObj.PhaseId = common.EmptyField
+	thisObj.PhaseId = ""
 	thisObj.NameEnglish = csvLine[keysMap["nameEn"]]
 	thisObj.NameArabic = csvLine[keysMap["nameAr"]]
 	thisObj.NameArabic = strings.Replace(thisObj.NameArabic, " ", "_", -1)
@@ -149,7 +155,7 @@ func (thisObj *Area) GetParentAssetKey() string {
 }
 
 func (thisObj *Area) GetParentGatewayKey() string {
-	return "cityId"
+	return common.EmptyField
 }
 
 func (thisObj *Area) GetMac() string {

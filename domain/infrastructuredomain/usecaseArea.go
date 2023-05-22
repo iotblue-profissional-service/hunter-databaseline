@@ -32,7 +32,7 @@ func UseCaseAreas(csvLines [][]string, keysMap map[string]int, action string) (s
 		return "validation finished \n valid document", err
 	}
 
-	err := crudfunctions.UseCaseDeviceAssetEntity(csvLines, keysMap, interfaces, (&City{}).GetAssetType(), "", "area", action, "")
+	err := crudfunctions.UseCaseDeviceAssetEntity(csvLines, keysMap, interfaces, (&City{}).GetAssetType(), common.EmptyField, "area", action, "")
 	if err != nil {
 		return "", err
 	}

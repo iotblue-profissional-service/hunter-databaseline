@@ -12,8 +12,8 @@ import (
 
 type City struct {
 	GlobalId    string  `json:"globalId"`
-	NameEnglish string  `json:"nameEnglish"`
-	NameArabic  string  `json:"name"`
+	NameEnglish string  `json:"name"`
+	NameArabic  string  `json:"nameArabic"`
 	Area        float64 `json:"area"`
 	LayerType   string  `json:"layerType"`
 	CreatedAt   string  `json:"createdAt,omitempty"`
@@ -29,7 +29,7 @@ func MigrateCityToCervelloAsset(city City) (cervello.Asset, error) {
 	return cervello.Asset{
 		ID:            city.GlobalId,
 		AssetType:     "City",
-		Name:          city.NameArabic,
+		Name:          city.NameEnglish,
 		ReferenceName: "CITY",
 		CustomFields:  toMap,
 	}, nil
@@ -64,7 +64,7 @@ func MigrateCervelloAssetToCity(asset cervello.Asset) (City, error) {
 	}
 
 	result.GlobalId = asset.ID
-	result.NameArabic = asset.Name
+	result.NameEnglish = asset.Name
 	result.CreatedAt = asset.CreatedAt
 	result.UpdatedAt = asset.UpdatedAt
 
@@ -89,7 +89,7 @@ func (city *City) Validate() error {
 }
 
 func (city *City) GetAssetType() string {
-	return "olympicCity"
+	return "cityRolesTest"
 }
 
 func MigrateCityFromCSVLine(csvLine []string, keysMap map[string]int) (City, error) {
@@ -120,17 +120,17 @@ func (thisObj *City) GetEssentialKeys() []string {
 
 func UseCaseCities(csvLines [][]string, keysMap map[string]int, action string) (string, error) {
 	for index, line := range csvLines {
-		fmt.Printf("Reading Line: %d", index+1)
+		fmt.Println("Reading Line: %d", index+1)
 		city, err := MigrateCityFromCSVLine(line, keysMap)
 		if err != nil {
 			return "", err
 		}
-		//fmt.Printf(city)
+		//fmt.Println(city)
 		if err := city.Validate(); err != nil {
 			return fmt.Sprintf("error reading Line: %d", index+1), err
 		}
 		if action == "validate" {
-			fmt.Printf("city no: %d is valid", index+1)
+			fmt.Println("city no: %d is valid", index+1)
 			continue
 		}
 		cityAsset, err := MigrateCityToCervelloAsset(city)
@@ -144,7 +144,7 @@ func UseCaseCities(csvLines [][]string, keysMap map[string]int, action string) (
 		//}
 
 		if fetchedCity, err := cervello.GetAssetByID(city.GlobalId, ""); err != nil || fetchedCity == nil || fetchedCity.ID == "" {
-			fmt.Printf("creating city no: %d", index+1)
+			fmt.Println("creating city no: %d", index+1)
 			_, err = cervello.CreateAsset(cityAsset, "")
 			if err != nil {
 				return fmt.Sprintf("error creating city no: %d", index+1), err
@@ -157,7 +157,7 @@ func UseCaseCities(csvLines [][]string, keysMap map[string]int, action string) (
 
 			go common.PublishAuditLog("Create", "City", city.GlobalId, city)
 		} else {
-			fmt.Printf("updating city no: %d", index+1)
+			fmt.Println("updating city no: %d", index+1)
 			_, err = UpdateCity(cityAsset)
 			if err != nil {
 				return fmt.Sprintf("error updating city no: %d", index+1), err

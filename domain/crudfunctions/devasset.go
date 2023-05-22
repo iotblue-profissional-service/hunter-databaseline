@@ -69,10 +69,10 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 	newAssetsMap := map[string]AssetInterface{}
 	newDevicesMap := map[string]DeviceInterface{}
 	for index, line := range csvLines {
-		fmt.Printf(fmt.Sprintf("Reading Line: %d", index+2))
+		fmt.Println(fmt.Sprintf("Reading Line: %d", index+2))
 		err := objects[index].MigrateFromCsvLine(line, keysMap)
 		if err != nil {
-			fmt.Printf(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
+			fmt.Println(fmt.Sprintf("Error reading line: %d : %s", index+2, err))
 			return err
 		}
 		newAssetsMap[objects[index].GetGlobalId()] = objects[index]
@@ -83,11 +83,11 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 	//region 2- fetch parent assets
 	parentAssets, err := cervello.GetAssetsByAssetType(fmt.Sprintf("\"%s\"", parentAssetType), cervello.QueryParams{PaginationObj: paginationObj}, token)
 	if err != nil {
-		fmt.Printf(fmt.Sprintf("error fetching parent assets from the database: %s", err))
+		fmt.Println(fmt.Sprintf("Errors fetching parent assets from the database: %s", err))
 		return err
 	}
 	if len(parentAssets) <= 0 {
-		fmt.Printf("no parent assets in the database")
+		fmt.Println("no parent assets in the database")
 		return errors.New("no parent assets in the database")
 	}
 	parentAssetMap := make(map[string]cervello.Asset)
@@ -101,12 +101,12 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 		for id := range existingAssetsMap {
 			common.SleepExecution()
 			if newAssetsMap[id] == nil {
-				fmt.Printf(fmt.Sprintf("deleting asset with id: %s", id))
+				fmt.Println(fmt.Sprintf("deleting asset with id: %s", id))
 				err = cervello.DeleteAsset(id, token)
 				if err != nil {
 					return errors.New("error deleting asset")
 				}
-				fmt.Printf(fmt.Sprintf("deleting device with id: %s", id))
+				fmt.Println(fmt.Sprintf("deleting device with id: %s", id))
 				err = cervello.DeleteDevice(id, token)
 				if err != nil {
 					return errors.New("error deleting device")
@@ -117,10 +117,10 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 	//endregion
 
 	//region 4- fetch parent gateways
-	parentGateways := make([]cervello.Device, 0)
+	// parentGateways := make([]cervello.Device, 0)
 	parentGatewayMap := make(map[string]cervello.Device)
 	if parentGatewayTag != common.EmptyField {
-		parentGateways, err = cervello.GetOrgDevicesFiltered(cervello.QueryParams{
+		parentGateways, err := cervello.GetOrgDevicesFiltered(cervello.QueryParams{
 			PaginationObj: paginationObj,
 			Filters: []cervello.Filter{{
 				Key:   "tags",
@@ -129,7 +129,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			}},
 		}, token)
 		if (err != nil) || (len(parentGateways) == 0) {
-			fmt.Printf("no parent gateways in the database")
+			fmt.Println("no parent gateways in the database")
 			return errors.New("no parent gateways in the database")
 		}
 		for _, parent := range parentGateways {
@@ -145,17 +145,17 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 		fetchedAsset := existingAssetsMap[objects[index].GetGlobalId()]
 		fetchedDevice := existingDeviceMap[objects[index].GetGlobalId()]
 		if fetchedAsset.ID == "" && fetchedDevice.ID == "" && action != common.UpdateOnlyAction {
-			fmt.Printf(fmt.Sprintf("creating line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("creating line no: %d", index+2))
 			//region 5- set parent assets info
 			parentAssetId := objects[index].GetParentAssetId()
 			if parentAssetMap[parentAssetId].ID != "" {
 				err = objects[index].SetParentAssetInfo(parentAssetMap[parentAssetId])
 				if err != nil {
-					fmt.Printf(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
 					return err
 				}
 			} else {
-				fmt.Printf(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
+				fmt.Println(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 				return errors.New(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 			}
 			//endregion
@@ -166,11 +166,11 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 				if parentGatewayMap[parentGatewayId].ID != "" {
 					err = objects[index].SetParentGatewayInfo(parentGatewayMap[parentGatewayId])
 					if err != nil {
-						fmt.Printf(fmt.Sprintf("error assign parent gateway info for line no: %d", index+2))
+						fmt.Println(fmt.Sprintf("error assign parent gateway info for line no: %d", index+2))
 						return err
 					}
 				} else {
-					fmt.Printf(fmt.Sprintf("invalid parent gateway id for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("invalid parent gateway id for line no: %d", index+2))
 					return errors.New(fmt.Sprintf("invalid gateway asset id for line no: %d", index+2))
 				}
 			}
@@ -178,18 +178,18 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 
 			//region 7- validate device
 			if err = objects[index].Validate(); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
 				return err
 			}
 			//endregion
 
 			//region 8- create
 			if err = checkUniqueDeviceFeatures(objects[index]); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
 				return err
 			}
 			if err = checkUniqueAssetFeatures(objects[index]); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating asset : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating asset : %d : %s", index+2, err))
 				return err
 			}
 			if objects[index].GetDeviceType() == cervello.DeviceTypeGateWay {
@@ -201,25 +201,24 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			//migrate to cervello device & asset
 			device, err := MigrateToCervelloDevice(objects[index])
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("Error migrating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error migrating device : %d : %s", index+2, err))
 				return err
 			}
 			asset, err := MigrateToCervelloAsset(objects[index])
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("Error migrating asset : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error migrating asset : %d : %s", index+2, err))
 				return err
 			}
-
 			// create device
 			createdDevice, err := cervello.CreateDevice(device, token)
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("error creating line no: %d: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error creating line no: %d: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error creating line no: %d: %s", index+2, err))
 			}
 			// create asset
 			_, err = cervello.CreateAsset(asset, token)
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("error creating line no: %d: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error creating line no: %d: %s", index+2, err))
 				_ = cervello.DeleteDevice(createdDevice.ID, token)
 				return errors.New(fmt.Sprintf("error creating line no: %d: %s", index+2, err))
 			}
@@ -230,7 +229,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
 				_ = cervello.DeleteAsset(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
 			}
 			//endregion
@@ -240,7 +239,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
 				_ = cervello.DeleteAsset(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the parent asset", index))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the parent asset", index))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the parent asset", index))
 			}
 			//endregion
@@ -250,7 +249,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
 				_ = cervello.DeleteAsset(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 			}
 			//endregion
@@ -260,17 +259,17 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			if action == common.CreateOnlyAction || fetchedDevice.ID == "" {
 				continue
 			}
-			fmt.Printf(fmt.Sprintf("updating line no: %d", index+2))
+			fmt.Println(fmt.Sprintf("updating line no: %d", index+2))
 			//region 5- set parent assets info
 			parentAssetId := objects[index].GetParentAssetId()
 			if parentAssetMap[parentAssetId].ID != "" {
 				err = objects[index].SetParentAssetInfo(parentAssetMap[parentAssetId])
 				if err != nil {
-					fmt.Printf(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("error assign parent asset info for line no: %d", index+2))
 					return err
 				}
 			} else {
-				fmt.Printf(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
+				fmt.Println(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 				return errors.New(fmt.Sprintf("invalid parent asset id for line no: %d", index+2))
 			}
 			//endregion
@@ -281,11 +280,11 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 				if parentGatewayMap[parentGatewayId].ID != "" {
 					err = objects[index].SetParentGatewayInfo(parentGatewayMap[parentGatewayId])
 					if err != nil {
-						fmt.Printf(fmt.Sprintf("error assign parent gateway info for line no: %d", index+2))
+						fmt.Println(fmt.Sprintf("error assign parent gateway info for line no: %d", index+2))
 						return err
 					}
 				} else {
-					fmt.Printf(fmt.Sprintf("invalid parent gateway id for line no: %d", index+2))
+					fmt.Println(fmt.Sprintf("invalid parent gateway id for line no: %d", index+2))
 					return errors.New(fmt.Sprintf("invalid gateway asset id for line no: %d", index+2))
 				}
 			}
@@ -293,7 +292,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 
 			//region 7- validate device
 			if err = objects[index].Validate(); err != nil {
-				fmt.Printf(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error validating device : %d : %s", index+2, err))
 				return err
 			}
 			//endregion
@@ -301,7 +300,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			//region 8- update
 			err = UpdateDeviceAssetEntity(fetchedAsset, objects[index], token)
 			if err != nil {
-				fmt.Printf(fmt.Sprintf("Error updating device: %d : %s", index+2, err))
+				fmt.Println(fmt.Sprintf("Error updating device: %d : %s", index+2, err))
 				return err
 			}
 			//endregion
@@ -311,7 +310,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
 				_ = cervello.DeleteAsset(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the application: %s", index+2, err))
 			}
 			//endregion
@@ -321,7 +320,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
 				_ = cervello.DeleteAsset(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the parent asset", index))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the parent asset", index))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the parent asset", index))
 			}
 			//endregion
@@ -331,7 +330,7 @@ func UseCaseDeviceAssetEntity(csvLines [][]string, keysMap map[string]int, objec
 			if err != nil {
 				_ = cervello.DeleteDevice(objects[index].GetGlobalId(), token)
 				_ = cervello.DeleteAsset(objects[index].GetGlobalId(), token)
-				fmt.Printf(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
+				fmt.Println(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 				return errors.New(fmt.Sprintf("error assign line no: %d to the parent asset: %s", index+2, err))
 			}
 			//endregion

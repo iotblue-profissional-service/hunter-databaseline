@@ -72,18 +72,6 @@ func ValidateAssetEntity(obj AssetInterface) error {
 		return errors.New("globalid must be uuid")
 	}
 
-	if obj.GetReferenceName() != common.EmptyField {
-		if obj.GetReferenceName() == "" {
-			return errors.New("IntegrationId is missing")
-		}
-	}
-
-	if obj.GetFeatureId() != common.EmptyField {
-		if obj.GetFeatureId() == "" {
-			return errors.New("FeatureId is missing")
-		}
-	}
-
 	//if obj.GetModel() != common.EmptyField {
 	//	if obj.GetModel() == "" {
 	//		return errors.New("model is missing")
@@ -99,10 +87,6 @@ func ValidateAssetEntity(obj AssetInterface) error {
 
 	if !common.IsValidUUID(obj.GetParentAssetId()) {
 		return errors.New("parent asset id must be uuid")
-	}
-
-	if obj.GetLayerType() == "" {
-		return errors.New("LayerType is missing")
 	}
 
 	return nil

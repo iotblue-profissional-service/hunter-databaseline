@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type HunterController struct {
@@ -23,11 +24,11 @@ type HunterController struct {
 	IP               string                 `json:"ip"`
 	Port             int64                  `json:"port"`
 	AreaId           string                 `json:"areaId"`
-	AreaNameEnglish  string                 `json:"areaNameEnglish"`
-	AreaNameArabic   string                 `json:"areaName"`
+	AreaName         string                 `json:"areaName"`
+	AreaNameArabic   string                 `json:"areaNameArabic"`
 	CityId           string                 `json:"cityId"`
-	CityNameEnglish  string                 `json:"cityNameEnglish"`
-	CityNameArabic   string                 `json:"cityName"`
+	CityName         string                 `json:"cityName"`
+	CityNameArabic   string                 `json:"cityNameArabic"`
 	X                float64                `json:"x"`
 	Y                float64                `json:"y"`
 	CreatedAt        string                 `json:"createdAt,omitempty"`
@@ -97,13 +98,15 @@ func (thisObj *HunterController) GetTags() []string {
 	if common.IsPhysicalDevice {
 		deviceStateTag = common.GisDevice
 	}
+	areaTag := strings.Replace(thisObj.AreaName, " ", "_", -1)
+	areaTag = strings.Replace(areaTag, ".", "", -1)
 	return []string{deviceStateTag,
 		"Hunter",
 		"irr_controller",
 		"irrigation",
 		fmt.Sprintf("%s_alarms", thisObj.Name),
-		thisObj.AreaNameEnglish,
-		thisObj.AreaNameArabic}
+		areaTag,
+	}
 }
 
 func (thisObj *HunterController) SetParentAssetInfo(parentAsset cervello.Asset) error {
@@ -113,10 +116,10 @@ func (thisObj *HunterController) SetParentAssetInfo(parentAsset cervello.Asset) 
 	}
 
 	thisObj.CityId = area.CityId
-	thisObj.CityNameEnglish = area.CityNameEnglish
+	thisObj.CityName = area.CityNameEnglish
 	thisObj.CityNameArabic = area.CityNameArabic
 	thisObj.AreaId = area.GlobalId
-	thisObj.AreaNameEnglish = area.NameEnglish
+	thisObj.AreaName = area.NameEnglish
 	thisObj.AreaNameArabic = area.NameArabic
 
 	return nil
@@ -213,6 +216,11 @@ func (thisObj *HunterController) GetEssentialKeys() []string {
 		"y",
 		"port",
 		"mac",
+		"stationCount",
+		"flowSensorCount",
+		"masterValveCount",
+		"brand",
+		"model",
 	}
 }
 
