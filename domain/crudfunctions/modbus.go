@@ -159,7 +159,7 @@ func UseCaseModbusDeviceEntity(csvLines [][]string, keysMap map[string]int, obje
 			}
 			if objects[index].GetDeviceType() == cervello.DeviceTypeGateWay {
 				device.CommunicationProtocol = cervello.DeviceProtocolModbus
-				device.ProtocolConfigurations = cervello.ModbusDeviceConfig{}
+				// device.ProtocolConfigurations = cervello.ModbusDeviceConfig{}
 			}
 
 			// create device
