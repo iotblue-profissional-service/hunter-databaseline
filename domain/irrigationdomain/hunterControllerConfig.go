@@ -27,7 +27,7 @@ var (
 			SlaveID:       1,
 			Quantity:      4,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 214,
@@ -88,7 +88,7 @@ var (
 			SlaveID:       1,
 			Quantity:      13,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 418,
@@ -113,7 +113,7 @@ var (
 			SlaveID:       1,
 			Quantity:      4,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 1302,
@@ -130,7 +130,7 @@ var (
 			SlaveID:       1,
 			Quantity:      2,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 68,
@@ -1063,7 +1063,7 @@ var (
 			SlaveID:       1,
 			Quantity:      231,
 			Sequence:      1,
-			OperationCode: 1,
+			OperationCode: 2,
 		},
 		{
 			Address: 1,
@@ -1080,7 +1080,7 @@ var (
 			SlaveID:       1,
 			Quantity:      2,
 			Sequence:      1,
-			OperationCode: 1,
+			OperationCode: 2,
 		},
 		{
 			Address: 4,
@@ -1109,7 +1109,7 @@ var (
 			SlaveID:       1,
 			Quantity:      5,
 			Sequence:      1,
-			OperationCode: 1,
+			OperationCode: 2,
 		},
 		{
 			Address: 12,
@@ -1174,7 +1174,7 @@ var (
 			SlaveID:       1,
 			Quantity:      14,
 			Sequence:      1,
-			OperationCode: 1,
+			OperationCode: 2,
 		},
 		{
 			Address: 33,
@@ -1255,7 +1255,7 @@ var (
 			SlaveID:       1,
 			Quantity:      18,
 			Sequence:      1,
-			OperationCode: 1,
+			OperationCode: 2,
 		},
 		{
 			Address: 1196,
@@ -1312,7 +1312,7 @@ var (
 			SlaveID:       1,
 			Quantity:      12,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2001,
@@ -1325,7 +1325,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2003,
@@ -1338,7 +1338,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2005,
@@ -1351,7 +1351,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2007,
@@ -1364,7 +1364,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2009,
@@ -1377,7 +1377,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2011,
@@ -1390,7 +1390,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2013,
@@ -1403,7 +1403,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2015,
@@ -1416,7 +1416,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2017,
@@ -1429,7 +1429,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2019,
@@ -1442,7 +1442,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2021,
@@ -1455,7 +1455,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2023,
@@ -1468,7 +1468,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2025,
@@ -1481,7 +1481,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2027,
@@ -1494,7 +1494,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2029,
@@ -1507,7 +1507,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2031,
@@ -1520,7 +1520,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2033,
@@ -1533,7 +1533,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2035,
@@ -1546,7 +1546,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2037,
@@ -1559,7 +1559,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2039,
@@ -1572,7 +1572,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2041,
@@ -1585,7 +1585,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2043,
@@ -1598,7 +1598,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2045,
@@ -1611,7 +1611,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2047,
@@ -1624,7 +1624,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2049,
@@ -1637,7 +1637,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2051,
@@ -1650,7 +1650,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2053,
@@ -1663,7 +1663,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2055,
@@ -1676,7 +1676,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2057,
@@ -1689,7 +1689,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2059,
@@ -1702,7 +1702,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2061,
@@ -1715,7 +1715,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 2063,
@@ -1728,7 +1728,7 @@ var (
 			SlaveID:       1,
 			Quantity:      1,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 		{
 			Address: 1285,
@@ -1753,7 +1753,7 @@ var (
 			SlaveID:       1,
 			Quantity:      4,
 			Sequence:      1,
-			OperationCode: 3,
+			OperationCode: 4,
 		},
 	}
 )
