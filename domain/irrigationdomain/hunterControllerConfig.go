@@ -1755,5 +1755,122 @@ var (
 			Sequence:      1,
 			OperationCode: 4,
 		},
+		{
+			Address: 1214,
+			Mapping: map[string]map[string]string{
+				"1214": {
+					"key":  "DecMod1Num",
+					"type": "TELEMETRY",
+				},
+				"1215": {
+					"key":  "DecMod1Installed",
+					"type": "TELEMETRY",
+				},
+				"1216": {
+					"key":  "DecMod1PathStatus",
+					"type": "TELEMETRY",
+				},
+				"1217": {
+					"key":  "DecMod1OutputMode",
+					"type": "TELEMETRY",
+				},
+				"1218": {
+					"key":  "DecMod1WateringStatus",
+					"type": "TELEMETRY",
+				},
+				"1219": {
+					"key":  "DecMod1OverloadStatus-alarm",
+					"type": "TELEMETRY",
+				},
+				"1220": {
+					"key":  "DecMod1A/DFullScale",
+					"type": "TELEMETRY",
+				},
+				"1221": {
+					"key":  "DecMod1Ph1/2Mismatch",
+					"type": "TELEMETRY",
+				},
+				"1222": {
+					"key":  "DecMod1LockOutTime",
+					"type": "TELEMETRY",
+				},
+				"1223": {
+					"key":  "DecMod2Num",
+					"type": "TELEMETRY",
+				},
+				"1224": {
+					"key":  "DecMod2Installed",
+					"type": "TELEMETRY",
+				},
+				"1225": {
+					"key":  "DecMod2PathStatus",
+					"type": "TELEMETRY",
+				},
+				"1226": {
+					"key":  "DecMod2OutputMode",
+					"type": "TELEMETRY",
+				},
+				"1227": {
+					"key":  "DecMod2WateringStatus",
+					"type": "TELEMETRY",
+				},
+				"1228": {
+					"key":  "DecMod2OverloadStatus-alarm",
+					"type": "TELEMETRY",
+				},
+				"1229": {
+					"key":  "DecMod2A/DFullScale",
+					"type": "TELEMETRY",
+				},
+				"1230": {
+					"key":  "DecMod2Ph1/2Mismatch",
+					"type": "TELEMETRY",
+				},
+				"1231": {
+					"key":  "DecMod2LockOutTime",
+					"type": "TELEMETRY",
+				},
+				"1232": {
+					"key":  "DecMod3Num",
+					"type": "TELEMETRY",
+				},
+				"1233": {
+					"key":  "DecMod3Installed",
+					"type": "TELEMETRY",
+				},
+				"1234": {
+					"key":  "DecMod3PathStatus",
+					"type": "TELEMETRY",
+				},
+				"1235": {
+					"key":  "DecMod3OutputMode",
+					"type": "TELEMETRY",
+				},
+				"1236": {
+					"key":  "DecMod3WateringStatus",
+					"type": "TELEMETRY",
+				},
+				"1237": {
+					"key":  "DecMod3OverloadStatus-alarm",
+					"type": "TELEMETRY",
+				},
+				"1238": {
+					"key":  "DecMod3A/DFullScale",
+					"type": "TELEMETRY",
+				},
+				"1239": {
+					"key":  "DecMod3Ph1/2Mismatch",
+					"type": "TELEMETRY",
+				},
+				"1240": {
+					"key":  "DecMod3LockOutTime",
+					"type": "TELEMETRY",
+				},
+			},
+			SlaveID:       1,
+			Quantity:      27,
+			Sequence:      1,
+			OperationCode: 4,
+		},
 	}
 )
