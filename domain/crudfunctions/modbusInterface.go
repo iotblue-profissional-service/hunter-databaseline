@@ -11,8 +11,6 @@ type ModbusInterface interface {
 
 	GetName() string
 
-	GetModel() string
-
 	ValidateModel() error
 
 	GetReferenceName() string

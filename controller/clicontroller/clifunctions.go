@@ -20,3 +20,7 @@ func HunterController(csvLines [][]string, keysMap map[string]int, action string
 func HunterStation(csvLines [][]string, keysMap map[string]int, action string) (string, error) {
 	return irrigationdomain.UseCaseHunterStation(csvLines, keysMap, action)
 }
+
+func WeatherStation(csvLines [][]string, keysMap map[string]int, action string) (string, error) {
+	return irrigationdomain.UseCaseWeatherStation(csvLines, keysMap, action)
+}

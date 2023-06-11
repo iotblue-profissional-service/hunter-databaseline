@@ -4,6 +4,7 @@ import (
 	"databaselineservice/domain/common"
 	"databaselineservice/domain/crudfunctions"
 	"databaselineservice/domain/infrastructuredomain"
+	"databaselineservice/domain/irrigationdomain/modbusConfig"
 	"databaselineservice/sdk/cervello"
 	"errors"
 	"fmt"
@@ -151,9 +152,9 @@ func (thisObj *HunterController) GetSearchTag() string {
 
 func (thisObj *HunterController) GetModbusConfig() *cervello.ModbusDeviceConfig {
 	return &cervello.ModbusDeviceConfig{
-		Configuration: hunterControllerConfig[:],
+		Configuration: modbusConfig.HunterControllerConfig[:],
 		Schedule: cervello.ModbusConfigurationSchedule{
-			Interval: 10,
+			Interval: 5,
 			TimeUnit: "Second",
 			Timezone: "Africa/Cairo",
 		},

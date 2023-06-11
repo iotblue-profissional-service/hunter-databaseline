@@ -1,9 +1,9 @@
-package irrigationdomain
+package modbusConfig
 
 import "databaselineservice/sdk/cervello"
 
 var (
-	hunterControllerConfig = [...]cervello.ModbusConfiguration{
+	HunterControllerConfig = [...]cervello.ModbusConfiguration{
 		{
 			Address: 56,
 			Mapping: map[string]map[string]string{
