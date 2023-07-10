@@ -74,6 +74,6 @@ func startServer() {
 	log.Println("starting the server")
 	server := gin.Default()
 
-	server.POST("/synch", CORSMiddleware() /*, AuthMiddleWare(AUTHORIZATION_METHOD)*/, ApiMapping)
+	server.POST("/synch", CORSMiddleware(), AuthMiddleWare(AUTHORIZATION_METHOD), ApiMapping)
 	_ = server.Run(":5051")
 }
