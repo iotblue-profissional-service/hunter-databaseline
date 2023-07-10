@@ -4,6 +4,7 @@ import (
 	"databaselineservice/controller/clicontroller"
 	"databaselineservice/domain/common"
 	"databaselineservice/utils/httperror"
+	"databaselineservice/utils/httpresponse"
 	"encoding/csv"
 	"errors"
 	"fmt"
@@ -99,7 +100,7 @@ func ApiMapping(context *gin.Context) {
 		csvLines = append(csvLines, line)
 	}
 
-	result, err := mapToControllerFunctions(csvLines, keysMap, body.Action, body.LayerName)
+	message, err := mapToControllerFunctions(csvLines, keysMap, body.Action, body.LayerName)
 	if err != nil {
 		restError := httperror.NewBadRequestError(err.Error())
 		context.JSON(
@@ -108,6 +109,8 @@ func ApiMapping(context *gin.Context) {
 		)
 		return
 	}
+
+	result := httpresponse.NewBaseResponse(nil, message, "POST")
 
 	context.JSON(
 		200,
