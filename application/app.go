@@ -45,7 +45,7 @@ available LayerNames :-
 area - irrController - irrStation
 `
 
-	app := cli.App("olympicbaseline", helpString)
+	app := cli.App("hunterbaseline", helpString)
 	action := app.StringArg("ACTION", "", "merge or validate or compare")
 	layer := app.StringArg("LAYERNAME", "", "GIS layer name")
 	csvFilePath := app.StringArg("CSVFILE", "", "a path to CSV file contain layer data")

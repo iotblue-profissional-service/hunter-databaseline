@@ -61,6 +61,8 @@ func cliMapping(action string, layer string, csvFilePath string) (string, error)
 		result, err = clicontroller.HunterStation(csvLines, keysMap, action)
 	case "weatherStation":
 		result, err = clicontroller.WeatherStation(csvLines, keysMap, action)
+	case "flowSensor":
+		result, err = clicontroller.FlowSensor(csvLines, keysMap, action)
 	default:
 		return "unsupported layer name", errors.New("wrong layer name")
 	}
