@@ -528,7 +528,7 @@ var (
 			Address: 40081,
 			Mapping: map[string]map[string]string{
 				"40081": {
-					"key":  "PH-Evapotranspiration",
+					"key":  "LastHourETo",
 					"type": "TELEMETRY",
 				},
 			},
@@ -541,7 +541,7 @@ var (
 			Address: 40083,
 			Mapping: map[string]map[string]string{
 				"40083": {
-					"key":  "AccumlatedEvapotranspiration",
+					"key":  "ETo",
 					"type": "TELEMETRY",
 				},
 			},
@@ -554,7 +554,7 @@ var (
 			Address: 40085,
 			Mapping: map[string]map[string]string{
 				"40085": {
-					"key":  "PD-TotalEvapotranspiration",
+					"key":  "PrevDayETo",
 					"type": "TELEMETRY",
 				},
 			},
