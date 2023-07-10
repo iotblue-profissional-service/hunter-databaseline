@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"datasynch/sdk/cervello"
+	"databaselineservice/sdk/cervello"
 	"errors"
 	"fmt"
 	"net/url"

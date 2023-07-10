@@ -53,22 +53,7 @@ func cliMapping(action string, layer string, csvFilePath string) (string, error)
 
 	csvLines = csvLines[1:]
 	var err error
-	switch layer {
-	case "city":
-		result, err = clicontroller.City(csvLines, keysMap, action)
-	case "area":
-		result, err = clicontroller.Area(csvLines, keysMap, action)
-	case "irrController":
-		result, err = clicontroller.HunterController(csvLines, keysMap, action)
-	case "irrStation":
-		result, err = clicontroller.HunterStation(csvLines, keysMap, action)
-	case "weatherStation":
-		result, err = clicontroller.WeatherStation(csvLines, keysMap, action)
-	case "flowSensor":
-		result, err = clicontroller.FlowSensor(csvLines, keysMap, action)
-	default:
-		return "unsupported layer name", errors.New("wrong layer name")
-	}
+	result, err = mapToControllerFunctions(csvLines, keysMap, action, layer)
 
 	return result, err
 }
@@ -95,7 +80,7 @@ func ApiMapping(context *gin.Context) {
 	keysMap := make(map[string]int)
 
 	keysMapLength := 0
-	for key, _ := range body.Data[0] {
+	for key := range body.Data[0] {
 		keysMap[key] = keysMapLength
 		keysMapLength += 1
 	}
@@ -124,7 +109,6 @@ func ApiMapping(context *gin.Context) {
 		200,
 		result,
 	)
-	return
 
 }
 
@@ -140,6 +124,9 @@ func mapToControllerFunctions(lines [][]string, keysMap map[string]int, action s
 		return clicontroller.HunterStation(lines, keysMap, action)
 	case "weatherStation":
 		return clicontroller.WeatherStation(lines, keysMap, action)
+	case "flowSensor":
+		return clicontroller.FlowSensor(lines, keysMap, action)
+
 	default:
 		return "unsupported layer name", errors.New("wrong layer name")
 	}

@@ -1,16 +1,20 @@
 package application
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
 	"os"
+
+	"github.com/gin-gonic/gin"
 
 	cli "github.com/jawher/mow.cli"
 )
 
-func StartApplication() {
+func StartBaselineApp() {
 	// choose which service to start
-	//startCliInterface()
+	startCliInterface()
+}
+
+func StartApiApp() {
 	startServer()
 }
 
