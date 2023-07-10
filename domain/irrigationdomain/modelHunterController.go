@@ -36,7 +36,7 @@ type HunterController struct {
 	UpdatedAt        string                 `json:"updatedAt,omitempty"`
 	StationCount     int64                  `json:"stationCount"`
 	FlowSensorCount  int64                  `json:"flowSensorCount"`
-	MasterValveCount int64                  `json:"MasterValveCount"`
+	MasterValveCount int64                  `json:"masterValveCount"`
 	AdditionalInfo   map[string]interface{} `json:"additionalInfo"`
 }
 
