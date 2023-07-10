@@ -78,8 +78,9 @@ func ApiMapping(context *gin.Context) {
 		return
 	}
 	keysMap := make(map[string]int)
+	keysMap["initialValue"] = 0
 
-	keysMapLength := 0
+	keysMapLength := 1
 	for key := range body.Data[0] {
 		keysMap[key] = keysMapLength
 		keysMapLength += 1
@@ -90,6 +91,9 @@ func ApiMapping(context *gin.Context) {
 	for _, entity := range body.Data {
 		line := make([]string, keysMapLength)
 		for key, index := range keysMap {
+			if index == 0 {
+				continue
+			}
 			line[index] = entity[key].(string)
 		}
 		csvLines = append(csvLines, line)
