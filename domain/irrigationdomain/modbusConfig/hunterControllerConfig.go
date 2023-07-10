@@ -1779,7 +1779,7 @@ var (
 					"type": "TELEMETRY",
 				},
 				"1219": {
-					"key":  "DecMod1OverloadStatus-alarm",
+					"key":  "DecMod1OverloadStatus-Alarm",
 					"type": "TELEMETRY",
 				},
 				"1220": {
@@ -1815,7 +1815,7 @@ var (
 					"type": "TELEMETRY",
 				},
 				"1228": {
-					"key":  "DecMod2OverloadStatus-alarm",
+					"key":  "DecMod2OverloadStatus-Alarm",
 					"type": "TELEMETRY",
 				},
 				"1229": {
@@ -1851,7 +1851,7 @@ var (
 					"type": "TELEMETRY",
 				},
 				"1237": {
-					"key":  "DecMod3OverloadStatus-alarm",
+					"key":  "DecMod3OverloadStatus-Alarm",
 					"type": "TELEMETRY",
 				},
 				"1238": {

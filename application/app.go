@@ -1,6 +1,7 @@
 package application
 
 import (
+	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 
@@ -8,7 +9,9 @@ import (
 )
 
 func StartApplication() {
-	startCliInterface()
+	// choose which service to start
+	//startCliInterface()
+	startServer()
 }
 
 func startCliInterface() {
@@ -45,7 +48,7 @@ available LayerNames :-
 area - irrController - irrStation
 `
 
-	app := cli.App("olympicbaseline", helpString)
+	app := cli.App("hunterbaseline", helpString)
 	action := app.StringArg("ACTION", "", "merge or validate or compare")
 	layer := app.StringArg("LAYERNAME", "", "GIS layer name")
 	csvFilePath := app.StringArg("CSVFILE", "", "a path to CSV file contain layer data")
@@ -61,4 +64,12 @@ area - irrController - irrStation
 	app.Run(os.Args)
 
 	//app.Bool()
+}
+
+func startServer() {
+	log.Println("starting the server")
+	server := gin.Default()
+
+	server.POST("/synch", CORSMiddleware(), AuthMiddleWare(AUTHORIZATION_METHOD), ApiMapping)
+	_ = server.Run(":5050")
 }
