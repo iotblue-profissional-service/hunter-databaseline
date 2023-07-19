@@ -20,6 +20,8 @@ type HunterStation struct {
 	LayerType       string                 `json:"layerType"`
 	ControllerName  string                 `json:"controllerName"`
 	ControllerId    string                 `json:"controllerId"`
+	FlowZoneName    string                 `json:"flowZoneName"`
+	FlowZoneId      string                 `json:"flowZoneId"`
 	AreaId          string                 `json:"areaId"`
 	AreaNameEnglish string                 `json:"areaNameEnglish"`
 	AreaNameArabic  string                 `json:"areaName"`
@@ -94,6 +96,7 @@ func (thisObj *HunterStation) GetTags() []string {
 		"station",
 		"irrigation",
 		thisObj.ControllerName,
+		thisObj.FlowZoneName,
 		fmt.Sprintf("%s_alarms", thisObj.ControllerName),
 		thisObj.AreaNameEnglish,
 		thisObj.AreaNameArabic}
@@ -119,11 +122,20 @@ func (thisObj *HunterStation) SetParentAssetInfo(parentAsset cervello.Asset) err
 }
 
 func (thisObj *HunterStation) SetParentGatewayInfo(parentDevice cervello.Device) error {
-	panel, err := MigrateHunterControllerFromCervelloDevice(parentDevice)
+	controller, err := MigrateHunterControllerFromCervelloDevice(parentDevice)
 	if err != nil {
 		return errors.New("error fetching parent controller: " + err.Error())
 	}
-	thisObj.ControllerName = panel.Name
+	thisObj.ControllerName = controller.Name
+	return nil
+}
+
+func (thisObj *HunterStation) SetParentFlowZoneInfo() error {
+	flowZoneDevice, err := cervello.GetDevice(thisObj.FlowZoneId, "")
+	if err != nil {
+		return errors.New("error fetching parent flow zone: " + err.Error())
+	}
+	thisObj.FlowZoneName = flowZoneDevice.Name
 	return nil
 }
 
@@ -152,6 +164,8 @@ func (thisObj *HunterStation) MigrateFromCsvLine(csvLine []string, keysMap map[s
 	if err != nil {
 		return err
 	}
+	thisObj.FlowZoneId = csvLine[keysMap["flowZoneId"]]
+	thisObj.SetParentFlowZoneInfo()
 	thisObj.ControllerId = csvLine[keysMap["controllerId"]]
 	thisObj.Brand = csvLine[keysMap["brand"]]
 	thisObj.Model = csvLine[keysMap["model"]]
@@ -172,6 +186,7 @@ func (thisObj *HunterStation) GetEssentialKeys() []string {
 		"y",
 		"controllerId",
 		"mac",
+		"flowZoneId",
 	}
 }
 

@@ -25,6 +25,6 @@ func WeatherStation(csvLines [][]string, keysMap map[string]int, action string) 
 	return irrigationdomain.UseCaseWeatherStation(csvLines, keysMap, action)
 }
 
-func FlowSensor(csvLines [][]string, keysMap map[string]int, action string) (string, error) {
-	return irrigationdomain.UseCaseHunterFlowSensor(csvLines, keysMap, action)
+func FlowZone(csvLines [][]string, keysMap map[string]int, action string) (string, error) {
+	return irrigationdomain.UseCaseHunterFlowZone(csvLines, keysMap, action)
 }

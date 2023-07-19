@@ -1872,5 +1872,230 @@ var (
 			Sequence:      1,
 			OperationCode: 4,
 		},
+		{
+			Address: 740,
+			Mapping: map[string]map[string]string{
+				"740": {
+					"key":  "flowSensor1Type",
+					"type": "TELEMETRY",
+				},
+				"741": {
+					"key":  "flowSensor1Location",
+					"type": "TELEMETRY",
+				},
+				"742": {
+					"key":  "flowSensor1DecMod",
+					"type": "TELEMETRY",
+				},
+				"743": {
+					"key":  "flowSensor1DecAdd",
+					"type": "TELEMETRY",
+				},
+				"744": {
+					"key":  "flowSensor1Kfactor",
+					"type": "TELEMETRY",
+				},
+				"745": {
+					"key":  "flowSensor1Offset",
+					"type": "TELEMETRY",
+				},
+				"746": {
+					"key":  "flowSensor1PulseRate",
+					"type": "TELEMETRY",
+				},
+				"747": {
+					"key":  "flowSensor1PulseUnits",
+					"type": "TELEMETRY",
+				},
+				"748": {
+					"key":  "flowSensor1Wireless",
+					"type": "TELEMETRY",
+				},
+				"749": {
+					"key":  "flowSensor2Type",
+					"type": "TELEMETRY",
+				},
+				"750": {
+					"key":  "flowSensor2Location",
+					"type": "TELEMETRY",
+				},
+				"751": {
+					"key":  "flowSensor2DecMod",
+					"type": "TELEMETRY",
+				},
+				"752": {
+					"key":  "flowSensor2DecAdd",
+					"type": "TELEMETRY",
+				},
+				"753": {
+					"key":  "flowSensor2Kfactor",
+					"type": "TELEMETRY",
+				},
+				"754": {
+					"key":  "flowSensor2Offset",
+					"type": "TELEMETRY",
+				},
+				"755": {
+					"key":  "flowSensor2PulseRate",
+					"type": "TELEMETRY",
+				},
+				"756": {
+					"key":  "flowSensor2PulseUnits",
+					"type": "TELEMETRY",
+				},
+				"757": {
+					"key":  "flowSensor2Wireless",
+					"type": "TELEMETRY",
+				},
+				"758": {
+					"key":  "flowSensor3Type",
+					"type": "TELEMETRY",
+				},
+				"759": {
+					"key":  "flowSensor3Location",
+					"type": "TELEMETRY",
+				},
+				"760": {
+					"key":  "flowSensor3DecMod",
+					"type": "TELEMETRY",
+				},
+				"761": {
+					"key":  "flowSensor3DecAdd",
+					"type": "TELEMETRY",
+				},
+				"762": {
+					"key":  "flowSensor3Kfactor",
+					"type": "TELEMETRY",
+				},
+				"763": {
+					"key":  "flowSensor3Offset",
+					"type": "TELEMETRY",
+				},
+				"764": {
+					"key":  "flowSensor3PulseRate",
+					"type": "TELEMETRY",
+				},
+				"765": {
+					"key":  "flowSensor3PulseUnits",
+					"type": "TELEMETRY",
+				},
+				"766": {
+					"key":  "flowSensor3Wireless",
+					"type": "TELEMETRY",
+				},
+				"767": {
+					"key":  "flowSensor4Type",
+					"type": "TELEMETRY",
+				},
+				"768": {
+					"key":  "flowSensor4Location",
+					"type": "TELEMETRY",
+				},
+				"769": {
+					"key":  "flowSensor4DecMod",
+					"type": "TELEMETRY",
+				},
+				"770": {
+					"key":  "flowSensor4DecAdd",
+					"type": "TELEMETRY",
+				},
+				"771": {
+					"key":  "flowSensor4Kfactor",
+					"type": "TELEMETRY",
+				},
+				"772": {
+					"key":  "flowSensor4Offset",
+					"type": "TELEMETRY",
+				},
+				"773": {
+					"key":  "flowSensor4PulseRate",
+					"type": "TELEMETRY",
+				},
+				"774": {
+					"key":  "flowSensor4PulseUnits",
+					"type": "TELEMETRY",
+				},
+				"775": {
+					"key":  "flowSensor4Wireless",
+					"type": "TELEMETRY",
+				},
+				"776": {
+					"key":  "flowSensor5Type",
+					"type": "TELEMETRY",
+				},
+				"777": {
+					"key":  "flowSensor5Location",
+					"type": "TELEMETRY",
+				},
+				"778": {
+					"key":  "flowSensor5DecMod",
+					"type": "TELEMETRY",
+				},
+				"779": {
+					"key":  "flowSensor5DecAdd",
+					"type": "TELEMETRY",
+				},
+				"780": {
+					"key":  "flowSensor5Kfactor",
+					"type": "TELEMETRY",
+				},
+				"781": {
+					"key":  "flowSensor5Offset",
+					"type": "TELEMETRY",
+				},
+				"782": {
+					"key":  "flowSensor5PulseRate",
+					"type": "TELEMETRY",
+				},
+				"783": {
+					"key":  "flowSensor5PulseUnit",
+					"type": "TELEMETRY",
+				},
+				"784": {
+					"key":  "flowSensor5Wireless",
+					"type": "TELEMETRY",
+				},
+				"785": {
+					"key":  "flowSensor6Type",
+					"type": "TELEMETRY",
+				},
+				"786": {
+					"key":  "flowSensor6Location",
+					"type": "TELEMETRY",
+				},
+				"787": {
+					"key":  "flowSensor6DecMod",
+					"type": "TELEMETRY",
+				},
+				"788": {
+					"key":  "flowSensor6DecAdd",
+					"type": "TELEMETRY",
+				},
+				"789": {
+					"key":  "flowSensor6Kfactor",
+					"type": "TELEMETRY",
+				},
+				"790": {
+					"key":  "flowSensor6Offset",
+					"type": "TELEMETRY",
+				},
+				"791": {
+					"key":  "flowSensor6PulseRate",
+					"type": "TELEMETRY",
+				},
+				"792": {
+					"key":  "flowSensor6PulseUnits",
+					"type": "TELEMETRY",
+				},
+				"793": {
+					"key":  "flowSensor6Wireless",
+					"type": "TELEMETRY",
+				},
+			},
+			SlaveID:       1,
+			Quantity:      53,
+			Sequence:      1,
+			OperationCode: 4,
+		},
 	}
 )

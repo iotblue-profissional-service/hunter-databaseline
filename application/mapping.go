@@ -131,8 +131,8 @@ func mapToControllerFunctions(lines [][]string, keysMap map[string]int, action s
 		return clicontroller.HunterStation(lines, keysMap, action)
 	case "weatherStation":
 		return clicontroller.WeatherStation(lines, keysMap, action)
-	case "flowSensor":
-		return clicontroller.FlowSensor(lines, keysMap, action)
+	case "flowZone":
+		return clicontroller.FlowZone(lines, keysMap, action)
 
 	default:
 		return "unsupported layer name", errors.New("wrong layer name")

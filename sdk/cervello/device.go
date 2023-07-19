@@ -345,9 +345,6 @@ func GetDeviceAttributes(deviceID string, privateToken string, configs ...Cervel
 	if err != nil {
 		return nil, err
 	}
-	// GET https://api.staging.cervello.io/data/v1/organizations/9a450c80-8511-4de5-8a1c-a3ecc6e9c862/devices/c5e37417-6adf-4225-9780-bfde6526e75f/attributes
-	// ?pageSize=100
-	// headers [Authorization: "Bearer {token}"]
 
 	resource := fmt.Sprintf(
 		"/data/v1/organizations/%s/devices/%s/attributes",
@@ -382,9 +379,7 @@ func CreateDevice(device Device, privateToken string, configs ...CervelloConfigu
 	if err != nil {
 		return nil, err
 	}
-	// POST https://api.staging.cervello.io/compose/v1/organizations/dbb02a67-6ab6-4485-b955-e485ade0a003/devices
-	// headers [Authorization]
-	//
+
 	resource := fmt.Sprintf(
 		"/compose/v1/organizations/%s/devices",
 		config.OrganizationID,
@@ -421,8 +416,6 @@ func UpdateDevice(deviceID string, device Device, privateToken string, configs .
 	if err != nil {
 		return err
 	}
-	// PUT https://api.staging.cervello.io/compose/v1/organizations/dbb02a67-6ab6-4485-b955-e485ade0a003/devices
-	// headers [Authorization]
 
 	resource := fmt.Sprintf(
 		"/compose/v1/organizations/%s/devices/%s",
@@ -506,9 +499,7 @@ func CreateDeviceAttributes(deviceID string, attributes map[string]interface{}, 
 	if err != nil {
 		return false, err
 	}
-	// POST https://api.staging.cervello.io/data/v1/organizations/dbb02a67-6ab6-4485-b955-e485ade0a003/devices/055685c4-06dc-4996-b36c-7989c354ef66/attributes
-	// {"data":{"Attrib01":"hhh"}}
-	// headers [Authorization]
+
 	resource := "/data/v1/organizations/" + config.OrganizationID + "/devices/" + deviceID + "/attributes"
 
 	var attributeBody = map[string]interface{}{

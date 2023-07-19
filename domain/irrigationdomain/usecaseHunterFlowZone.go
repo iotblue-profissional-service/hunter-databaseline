@@ -6,16 +6,16 @@ import (
 	"databaselineservice/domain/infrastructuredomain"
 )
 
-func UseCaseHunterFlowSensor(csvLines [][]string, keysMap map[string]int, action string) (string, error) {
+func UseCaseHunterFlowZone(csvLines [][]string, keysMap map[string]int, action string) (string, error) {
 	interfaces := make([]crudfunctions.DeviceInterface, len(csvLines))
 	for index := range interfaces {
-		interfaces[index] = &HunterFlowSensor{}
+		interfaces[index] = &HunterFlowZone{}
 	}
 
 	if action == common.ValidateAction {
 		validatingObjects := make([]crudfunctions.ValidatingObject, len(csvLines))
 		for index := range interfaces {
-			validatingObjects[index] = &HunterFlowSensor{}
+			validatingObjects[index] = &HunterFlowZone{}
 		}
 		essentialKeys := interfaces[0].GetEssentialKeys()
 
@@ -31,10 +31,10 @@ func UseCaseHunterFlowSensor(csvLines [][]string, keysMap map[string]int, action
 		return "validation finished \n valid document", err
 	}
 
-	err := crudfunctions.UseCaseDeviceEntity(csvLines, keysMap, interfaces, (&infrastructuredomain.Area{}).GetAssetType(), (&HunterController{}).GetSearchTag(), "HunterFlowSensor", action, "")
+	err := crudfunctions.UseCaseDeviceEntity(csvLines, keysMap, interfaces, (&infrastructuredomain.Area{}).GetAssetType(), (&HunterController{}).GetSearchTag(), "HunterFlowZone", action, "")
 	if err != nil {
 		return "", err
 	}
 
-	return "Hunter Flow Sensors are done successfully", nil
+	return "Hunter Flow Zones are done successfully", nil
 }

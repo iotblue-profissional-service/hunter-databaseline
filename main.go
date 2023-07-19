@@ -10,6 +10,6 @@ func init() {
 }
 
 func main() {
-	// application.StartBaselineApp()
-	application.StartApiApp()
+	application.StartBaselineApp()
+	// application.StartApiApp()
 }

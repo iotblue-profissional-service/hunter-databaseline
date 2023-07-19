@@ -6,16 +6,18 @@ import (
 	"databaselineservice/domain/infrastructuredomain"
 	"databaselineservice/sdk/cervello"
 	"errors"
+	"fmt"
 	"strconv"
 )
 
-type HunterFlowSensor struct {
+type HunterFlowZone struct {
 	GlobalId        string                 `json:"globalId"`
 	Name            string                 `json:"name"`
 	Type            string                 `json:"type"`
 	LayerType       string                 `json:"layerType"`
 	ControllerName  string                 `json:"controllerName"`
 	ControllerId    string                 `json:"controllerId"`
+	Order           int64                  `json:"order"`
 	AreaId          string                 `json:"areaId"`
 	AreaNameEnglish string                 `json:"areaNameEnglish"`
 	AreaNameArabic  string                 `json:"areaName"`
@@ -29,58 +31,58 @@ type HunterFlowSensor struct {
 	AdditionalInfo  map[string]interface{} `json:"additionalInfo"`
 }
 
-func (thisObj *HunterFlowSensor) GetMac() string {
+func (thisObj *HunterFlowZone) GetMac() string {
 	// return thisObj.MacAddress
 	return common.EmptyField
 }
 
-func (thisObj *HunterFlowSensor) GetGlobalId() string {
+func (thisObj *HunterFlowZone) GetGlobalId() string {
 	return thisObj.GlobalId
 }
 
-func (thisObj *HunterFlowSensor) GetCommunicationProtocolConfiguration() (string, interface{}) {
+func (thisObj *HunterFlowZone) GetCommunicationProtocolConfiguration() (string, interface{}) {
 	return common.EmptyField, nil
 }
 
-func (thisObj *HunterFlowSensor) GetName() string {
+func (thisObj *HunterFlowZone) GetName() string {
 	return thisObj.Name
 }
 
-func (thisObj *HunterFlowSensor) GetModel() string {
+func (thisObj *HunterFlowZone) GetModel() string {
 	// return thisObj.Model
 	return common.EmptyField
 }
 
-func (thisObj *HunterFlowSensor) ValidateModel() error {
+func (thisObj *HunterFlowZone) ValidateModel() error {
 	// un implemented until i hava a list of models
 	return nil
 }
 
-func (thisObj *HunterFlowSensor) GetReferenceName() string {
+func (thisObj *HunterFlowZone) GetReferenceName() string {
 	return thisObj.GlobalId
 }
 
-func (thisObj *HunterFlowSensor) GetClientId() string {
+func (thisObj *HunterFlowZone) GetClientId() string {
 	return ""
 }
 
-func (thisObj *HunterFlowSensor) GetIP() string {
+func (thisObj *HunterFlowZone) GetIP() string {
 	return common.EmptyField
 }
 
-func (thisObj *HunterFlowSensor) GetParentAssetId() string {
+func (thisObj *HunterFlowZone) GetParentAssetId() string {
 	return thisObj.AreaId
 }
 
-func (thisObj *HunterFlowSensor) GetParentGatewayId() string {
+func (thisObj *HunterFlowZone) GetParentGatewayId() string {
 	return thisObj.ControllerId
 }
 
-func (thisObj *HunterFlowSensor) GetDeviceType() string {
+func (thisObj *HunterFlowZone) GetDeviceType() string {
 	return cervello.DeviceTypePeriphral
 }
 
-func (thisObj *HunterFlowSensor) GetTags() []string {
+func (thisObj *HunterFlowZone) GetTags() []string {
 	deviceStateTag := common.MockDevice
 	if common.IsPhysicalDevice {
 		deviceStateTag = common.GisDevice
@@ -88,17 +90,18 @@ func (thisObj *HunterFlowSensor) GetTags() []string {
 	return []string{deviceStateTag,
 		"Hunter",
 		"flowsensor",
+		"flowzone",
 		"irrigation",
 		thisObj.ControllerName,
 		/*thisObj.AreaNameEnglish,*/
 		thisObj.AreaNameArabic}
 }
 
-func (thisObj *HunterFlowSensor) GetSearchTag() string {
-	return "flowsensor"
+func (thisObj *HunterFlowZone) GetSearchTag() string {
+	return "flowzone"
 }
 
-func (thisObj *HunterFlowSensor) SetParentAssetInfo(parentAsset cervello.Asset) error {
+func (thisObj *HunterFlowZone) SetParentAssetInfo(parentAsset cervello.Asset) error {
 	part, err := infrastructuredomain.MigrateCervelloAssetToArea(parentAsset)
 	if err != nil {
 		return errors.New("error fetching parent area: " + err.Error())
@@ -113,7 +116,7 @@ func (thisObj *HunterFlowSensor) SetParentAssetInfo(parentAsset cervello.Asset) 
 	return nil
 }
 
-func (thisObj *HunterFlowSensor) SetParentGatewayInfo(parentDevice cervello.Device) error {
+func (thisObj *HunterFlowZone) SetParentGatewayInfo(parentDevice cervello.Device) error {
 	controller, err := MigrateHunterControllerFromCervelloDevice(parentDevice)
 	if err != nil {
 		return errors.New("error fetching parent controller: " + err.Error())
@@ -122,21 +125,25 @@ func (thisObj *HunterFlowSensor) SetParentGatewayInfo(parentDevice cervello.Devi
 	return nil
 }
 
-func (thisObj *HunterFlowSensor) GetLayerType() string {
+func (thisObj *HunterFlowZone) GetLayerType() string {
 	return thisObj.LayerType
 }
 
-func (thisObj *HunterFlowSensor) Validate() error {
+func (thisObj *HunterFlowZone) Validate() error {
 	return crudfunctions.ValidateDeviceEntity(thisObj)
 }
 
-func (thisObj *HunterFlowSensor) MigrateFromCsvLine(csvLine []string, keysMap map[string]int) error {
+func (thisObj *HunterFlowZone) MigrateFromCsvLine(csvLine []string, keysMap map[string]int) error {
 	var err error
 
 	thisObj.GlobalId = csvLine[keysMap["globalId"]]
-	thisObj.Name = csvLine[keysMap["name"]]
+	thisObj.Name = fmt.Sprintf("%s-%s", csvLine[keysMap["name"]], csvLine[keysMap["controllerId"]])
 	thisObj.CityId = csvLine[keysMap["cityId"]]
 	thisObj.AreaId = csvLine[keysMap["areaId"]]
+	thisObj.Order, err = strconv.ParseInt(csvLine[keysMap["order"]], 10, 64)
+	if err != nil {
+		return err
+	}
 	thisObj.X, err = strconv.ParseFloat(csvLine[keysMap["x"]], 64)
 	if err != nil {
 		return err
@@ -146,14 +153,14 @@ func (thisObj *HunterFlowSensor) MigrateFromCsvLine(csvLine []string, keysMap ma
 		return err
 	}
 	thisObj.ControllerId = csvLine[keysMap["controllerId"]]
-	thisObj.Type = "flowsensor"
+	thisObj.Type = csvLine[keysMap["type"]]
 	thisObj.LayerType = "point"
 	thisObj.AdditionalInfo = common.SetupAdditionalInfo(keysMap, thisObj.GetEssentialKeys(), csvLine)
 
 	return err
 }
 
-func (thisObj *HunterFlowSensor) GetEssentialKeys() []string {
+func (thisObj *HunterFlowZone) GetEssentialKeys() []string {
 	return []string{
 		"globalId",
 		"integrationId",
@@ -162,10 +169,11 @@ func (thisObj *HunterFlowSensor) GetEssentialKeys() []string {
 		"x",
 		"y",
 		"controllerId",
+		"order",
 	}
 }
 
-func (thisObj *HunterFlowSensor) GetNonDuplicatingKeys() []string {
+func (thisObj *HunterFlowZone) GetNonDuplicatingKeys() []string {
 	return []string{
 		"globalId",
 		"integrationId",
@@ -173,10 +181,10 @@ func (thisObj *HunterFlowSensor) GetNonDuplicatingKeys() []string {
 	}
 }
 
-func (thisObj *HunterFlowSensor) GetParentAssetKey() string {
+func (thisObj *HunterFlowZone) GetParentAssetKey() string {
 	return "areaId"
 }
 
-func (thisObj *HunterFlowSensor) GetParentGatewayKey() string {
+func (thisObj *HunterFlowZone) GetParentGatewayKey() string {
 	return "controllerId"
 }

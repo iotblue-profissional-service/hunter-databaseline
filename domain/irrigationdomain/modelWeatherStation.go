@@ -89,12 +89,13 @@ func (thisObj *WeatherStation) GetTags() []string {
 		deviceStateTag = common.GisDevice
 	}
 	areaTag := strings.Replace(thisObj.AreaName, " ", "_", -1)
-	areaTag = strings.Replace(areaTag, ".", "", -1)
+	nameTag := strings.Replace(thisObj.Name, " ", "_", -1)
 	return []string{deviceStateTag,
 		"Hunter",
 		"weather_station",
 		"irrigation",
 		areaTag,
+		nameTag,
 	}
 }
 

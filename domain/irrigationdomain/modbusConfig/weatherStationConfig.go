@@ -255,7 +255,7 @@ var (
 			Address: 40039,
 			Mapping: map[string]map[string]string{
 				"40039": {
-					"key":  "RelativeHumidity",
+					"key":  "relativeHumidity",
 					"type": "TELEMETRY",
 				},
 			},
